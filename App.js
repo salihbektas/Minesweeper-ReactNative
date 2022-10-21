@@ -1,11 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+
+
+const width = Dimensions.get("window").width
 
 export default function App() {
+
+  function generateTable(){
+    const field = new Array(4)
+
+    for(let i = 0; i < 4; ++i)
+      field[i] = new Array(4)
+
+    for(let i = 0; i < 4; ++i)
+      for(let j = 0; j < 4; ++j)
+        field[i][j] = (i*4) +j+1
+
+    return field
+  }
+
+
+  const [table, setTable] = useState(() => generateTable())
+
+
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      {table.map(row => 
+        row.map(cell => {
+          return (<View style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/4, aspectRatio:1}}>
+            <Text>{cell}</Text>
+          </View>)
+        }))}
     </View>
   );
 }
@@ -16,5 +43,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
+    flexDirection:"row",
+    paddingTop: 25
   },
 });
