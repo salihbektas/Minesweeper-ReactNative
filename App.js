@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
 
 
 const width = Dimensions.get("window").width
@@ -19,7 +19,8 @@ export default function App() {
           isMine: false,
           row: i,
           column: j,
-          numberOfAdjacentMines: 0
+          numberOfAdjacentMines: 0,
+          isPressed: false
         }
         field[i][j] = cell
       }
@@ -30,17 +31,27 @@ export default function App() {
 
 
   const [table, setTable] = useState(() => generateTable())
+  const [counter, setCounter] = useState(0)
+
+  function onPress(row, column){
+    let newTable = [...table]
+    newTable[row][column].isPressed = true
+
+    setTable(newTable)
+
+  }
 
 
 
   return (
     <View style={styles.container}>
-      {table.map((row, rowIndex) => 
+      {table.map((row, rowIndex) =>
         row.map((cell, cellIndex) => {
-          return (<View style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/4, aspectRatio:1}} key={`${rowIndex}${cellIndex}`}>
-            <Text>{cell.numberOfAdjacentMines}</Text>
-          </View>)
-        }))}
+          return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/4, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)}>
+            {cell.isPressed ? <Text>{cell.numberOfAdjacentMines}</Text> : null}
+          </Pressable>)
+        }
+      ))}
     </View>
   );
 }
