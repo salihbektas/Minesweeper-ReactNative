@@ -13,9 +13,17 @@ export default function App() {
     for(let i = 0; i < 4; ++i)
       field[i] = new Array(4)
 
-    for(let i = 0; i < 4; ++i)
-      for(let j = 0; j < 4; ++j)
-        field[i][j] = (i*4) +j+1
+    for(let i = 0; i < 4; ++i){
+      for(let j = 0; j < 4; ++j){
+        let cell = {
+          isMine: false,
+          row: i,
+          column: j,
+          numberOfAdjacentMines: 0
+        }
+        field[i][j] = cell
+      }
+    }
 
     return field
   }
@@ -27,10 +35,10 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {table.map(row => 
-        row.map(cell => {
-          return (<View style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/4, aspectRatio:1}}>
-            <Text>{cell}</Text>
+      {table.map((row, rowIndex) => 
+        row.map((cell, cellIndex) => {
+          return (<View style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/4, aspectRatio:1}} key={`${rowIndex}${cellIndex}`}>
+            <Text>{cell.numberOfAdjacentMines}</Text>
           </View>)
         }))}
     </View>
