@@ -23,7 +23,8 @@ export default function App() {
           row: i,
           column: j,
           numberOfAdjacentMines: 0,
-          isPressed: false
+          isPressed: false,
+          isFlagged: false
         }
         field[i][j] = cell
       }
@@ -55,11 +56,25 @@ export default function App() {
   const [table, setTable] = useState([[]])
 
   function onPress(row, column){
+    if(table[row][column].isFlagged)
+      return
+
     let newTable = [...table]
     newTable[row][column].isPressed = true
 
     setTable(newTable)
 
+  }
+
+  function onFlag(row, column){
+    if(table[row][column].isPressed)
+      return
+    
+    let newTable = [...table]
+
+    newTable[row][column].isFlagged = !newTable[row][column].isFlagged 
+
+    setTable(newTable)
   }
 
   useEffect(() => {
@@ -71,8 +86,8 @@ export default function App() {
     <View style={styles.container}>
       {table.map((row, rowIndex) =>
         row.map((cell, cellIndex) => {
-          return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/LENGTH_OF_TABLE_EDGE, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)}>
-            {cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
+          return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/LENGTH_OF_TABLE_EDGE, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
+            {cell.isFlagged ? <Text>F</Text> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
           </Pressable>)
         }
       ))}
