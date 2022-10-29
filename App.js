@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 
 const width = Dimensions.get("window").width
@@ -100,13 +100,18 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {table.map((row, rowIndex) =>
-        row.map((cell, cellIndex) => {
-          return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/LENGTH_OF_TABLE_EDGE, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
-            {cell.isFlagged ? <Text>F</Text> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
-          </Pressable>)
-        }
-      ))}
+      <View style={styles.table}>
+        {table.map((row, rowIndex) =>
+          row.map((cell, cellIndex) => {
+            return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/LENGTH_OF_TABLE_EDGE, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
+              {cell.isFlagged ? <Text>F</Text> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
+            </Pressable>)
+          }
+        ))}
+      </View>
+      <TouchableOpacity style={styles.btnReset} onPress={() => setTable(generateTable())}>
+        <Text>Reset</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -116,9 +121,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexWrap: 'wrap',
-    flexDirection:"row",
+    justifyContent: 'space-around',
     paddingTop: 25
   },
+
+  table: {
+
+    flexWrap: 'wrap',
+    flexDirection:"row",
+    justifyContent: "center",
+    alignItems:"center"
+  },
+
+  btnReset: {
+    backgroundColor: "lightgrey",
+    borderRadius:6,
+    paddingHorizontal: 18,
+    paddingVertical: 6
+  }
 });
