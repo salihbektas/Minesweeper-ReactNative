@@ -56,11 +56,27 @@ export default function App() {
   const [table, setTable] = useState([[]])
 
   function onPress(row, column){
-    if(table[row][column].isFlagged)
+    if(table[row][column].isFlagged ||
+       table[row][column].isPressed)
       return
 
     let newTable = [...table]
     newTable[row][column].isPressed = true
+
+    let neighboringTiles = []
+
+    if(newTable[row][column].numberOfAdjacentMines === 0){
+      for(let i = row-1; i < row+2; ++i){
+        for(let j = column-1; j < column+2; ++j){
+          if(i >= 0 && i < LENGTH_OF_TABLE_EDGE && j >= 0 && j < LENGTH_OF_TABLE_EDGE){
+            neighboringTiles.push([i,j])
+          }
+        }
+      }
+
+      neighboringTiles.map(item => onPress(item[0], item[1]))
+      
+    }
 
     setTable(newTable)
 
