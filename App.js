@@ -24,7 +24,7 @@ export default function App() {
           column: j,
           numberOfAdjacentMines: 0,
           isPressed: false,
-          isFlagged: false
+          isFlagged: false,
         }
         field[i][j] = cell
       }
@@ -102,12 +102,16 @@ export default function App() {
     <View style={styles.container}>
       <View style={styles.table}>
         {table.map((row, rowIndex) =>
-          row.map((cell, cellIndex) => {
-            return (<Pressable style={{alignItems: "center", justifyContent: "center", borderWidth:2, width:width/LENGTH_OF_TABLE_EDGE, aspectRatio:1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
-              {cell.isFlagged ? <Text>F</Text> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
-            </Pressable>)
-          }
-        ))}
+          <View style={styles.row} key={rowIndex} >
+            {row.map((cell, cellIndex) => {
+              return (
+                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/LENGTH_OF_TABLE_EDGE-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
+                  {cell.isFlagged ? <Text>F</Text> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
+                </Pressable>
+              )
+            })}
+          </View>
+        )}
       </View>
       <TouchableOpacity style={styles.btnReset} onPress={() => setTable(generateTable())}>
         <Text>Reset</Text>
@@ -116,21 +120,32 @@ export default function App() {
   );
 }
 
+const dark = '#13141F'
+const white = '#FCFCFC'
+const tileClosed = '#30B7FF'
+const tileOpened = '#6A7BFF'
+const redFlag = '#F07067'
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: white,
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingTop: 25
   },
 
   table: {
+    backgroundColor: dark,
+    width: "100%",
+    aspectRatio: 1,
+    justifyContent: "space-evenly",
+  },
 
-    flexWrap: 'wrap',
-    flexDirection:"row",
-    justifyContent: "center",
-    alignItems:"center"
+  row: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 
   btnReset: {
