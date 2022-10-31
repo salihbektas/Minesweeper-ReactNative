@@ -106,7 +106,9 @@ export default function App() {
             {row.map((cell, cellIndex) => {
               return (
                 <Pressable style={{alignItems: "center", justifyContent: "center", width:width/LENGTH_OF_TABLE_EDGE-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
-                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{resizeMode: "center"}} /> : cell.isPressed ? cell.isMine ? <Text>#</Text>:<Text>{cell.numberOfAdjacentMines}</Text> : null}
+                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-1, height:width/LENGTH_OF_TABLE_EDGE-1, resizeMode: "contain"}} /> : 
+                  cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-5, height:width/LENGTH_OF_TABLE_EDGE-5, resizeMode: "contain"}} /> :
+                  <Text>{cell.numberOfAdjacentMines}</Text> : null}
                 </Pressable>
               )
             })}
