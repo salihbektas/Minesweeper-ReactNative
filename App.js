@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image, Vibration} from 'react-native';
 
 
 const width = Dimensions.get("window").width
@@ -91,6 +91,7 @@ export default function App() {
     newTable[row][column].isFlagged = !newTable[row][column].isFlagged 
 
     setTable(newTable)
+    Vibration.vibrate(100)
   }
 
   useEffect(() => {
