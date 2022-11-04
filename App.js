@@ -32,7 +32,7 @@ export default function App() {
 
     let numberOfMine = 0
 
-    while(numberOfMine < 4){
+    while(numberOfMine < 15){
       let x = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
       let y = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
 
@@ -94,6 +94,24 @@ export default function App() {
     Vibration.vibrate(100)
   }
 
+  function openAllNeighbour(row, column){
+
+    [-1, 0, 1].forEach(rowModifier => {
+      [-1, 0, 1].forEach(columnModifier => {
+        if(row+rowModifier >= 0 && row+rowModifier < LENGTH_OF_TABLE_EDGE && column+columnModifier >= 0 && column+columnModifier < LENGTH_OF_TABLE_EDGE)
+          onPress(row+rowModifier, column+columnModifier)
+      })
+    })
+  }
+
+  function onLongPress(row, column){
+    if(table[row][column].isPressed)
+      openAllNeighbour(row, column)
+    else
+      onFlag(row, column)
+
+  }
+
   useEffect(() => {
     setTable(generateTable())
   },[])
@@ -106,7 +124,7 @@ export default function App() {
           <View style={styles.row} key={rowIndex} >
             {row.map((cell, cellIndex) => {
               return (
-                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/LENGTH_OF_TABLE_EDGE-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onFlag(rowIndex, cellIndex)} >
+                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/LENGTH_OF_TABLE_EDGE-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
                   {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-1, height:width/LENGTH_OF_TABLE_EDGE-1, resizeMode: "contain"}} /> : 
                   cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-5, height:width/LENGTH_OF_TABLE_EDGE-5, resizeMode: "contain"}} /> :
                   <Text>{cell.numberOfAdjacentMines}</Text> : null}
