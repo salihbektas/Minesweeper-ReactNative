@@ -8,6 +8,16 @@ const width = Dimensions.get("window").width
 export default function App() {
 
   const LENGTH_OF_TABLE_EDGE = 10
+  const modifierList = [
+    [-1,-1],
+    [-1, 0],
+    [-1, 1],
+    [ 0,-1],
+    [ 0, 1],
+    [ 1,-1],
+    [ 1, 0],
+    [ 1, 1]
+  ]
 
   function generateTable(){
 
@@ -63,23 +73,30 @@ export default function App() {
     let newTable = [...table]
     newTable[row][column].isPressed = true
 
-    let neighboringTiles = []
-
     if(newTable[row][column].numberOfAdjacentMines === 0){
-      for(let i = row-1; i < row+2; ++i){
-        for(let j = column-1; j < column+2; ++j){
-          if(i >= 0 && i < LENGTH_OF_TABLE_EDGE && j >= 0 && j < LENGTH_OF_TABLE_EDGE){
-            neighboringTiles.push([i,j])
-          }
-        }
-      }
+      let neighbourTileStack = []
 
-      neighboringTiles.map(item => onPress(item[0], item[1]))
-      
+      neighbourTileStack.push([row, column])
+
+      while(neighbourTileStack.length > 0){
+        const [rowIndex, columnIndex] = neighbourTileStack.pop()
+
+        modifierList.map(([rowModifier, columnModifier]) => {
+          if(rowIndex+rowModifier >= 0 && 
+             rowIndex+rowModifier < LENGTH_OF_TABLE_EDGE && 
+             columnIndex+columnModifier >= 0 &&
+             columnIndex+columnModifier < LENGTH_OF_TABLE_EDGE &&
+             !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed)
+          {
+            newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed = true
+            if(newTable[rowIndex+rowModifier][columnIndex+columnModifier].numberOfAdjacentMines === 0)
+              neighbourTileStack.push([rowIndex+rowModifier, columnIndex+columnModifier])
+          }
+        })
+      }
     }
 
     setTable(newTable)
-
   }
 
   function onFlag(row, column){
