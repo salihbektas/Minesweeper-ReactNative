@@ -19,7 +19,10 @@ export default function App() {
     [ 1, 1]
   ]
 
+  const [isPlay, setIsPlay] = useState(true)
+
   function generateTable(){
+    setIsPlay(true)
 
     const field = new Array(LENGTH_OF_TABLE_EDGE)
 
@@ -67,11 +70,14 @@ export default function App() {
 
   function onPress(row, column){
     if(table[row][column].isFlagged ||
-       table[row][column].isPressed)
+       table[row][column].isPressed ||
+       !isPlay)
       return
 
     let newTable = [...table]
     newTable[row][column].isPressed = true
+    if(newTable[row][column].isMine)
+      setIsPlay(false)
 
     if(newTable[row][column].numberOfAdjacentMines === 0){
       let neighbourTileStack = []
@@ -89,6 +95,8 @@ export default function App() {
              !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed)
           {
             newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed = true
+            if(newTable[rowIndex+rowModifier][columnIndex+columnModifier].isMine)
+              setIsPlay(false)
             if(newTable[rowIndex+rowModifier][columnIndex+columnModifier].numberOfAdjacentMines === 0)
               neighbourTileStack.push([rowIndex+rowModifier, columnIndex+columnModifier])
           }
@@ -122,6 +130,8 @@ export default function App() {
   }
 
   function onLongPress(row, column){
+    if(!isPlay)
+      return
     if(table[row][column].isPressed)
       openAllNeighbour(row, column)
     else
