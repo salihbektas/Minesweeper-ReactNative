@@ -20,9 +20,11 @@ export default function App() {
   ]
 
   const [isPlay, setIsPlay] = useState(true)
+  const [isFirst, setIsFirst] = useState(true)
 
   function generateTable(){
     setIsPlay(true)
+    setIsFirst(true)
 
     const field = new Array(LENGTH_OF_TABLE_EDGE)
 
@@ -43,32 +45,45 @@ export default function App() {
       }
     }
 
+    return field
+  }
+
+  function createMines(firstTouchRow, firstTouchColumn){
+
     let numberOfMine = 0
 
-    while(numberOfMine < 15){
+    while(numberOfMine < 20){
       let x = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
       let y = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
 
-      if(!field[x][y].isMine){
+      if(!table[x][y].isMine &&
+          (x < firstTouchRow-1 || x > firstTouchRow+1 ||
+           y < firstTouchColumn-1 || y > firstTouchColumn+1)
+        )
+      {
         for(let i = x-1; i < x+2; ++i){
           for(let j = y-1; j < y+2; ++j){
             if(i >= 0 && i < LENGTH_OF_TABLE_EDGE && j >= 0 && j < LENGTH_OF_TABLE_EDGE){
-              field[i][j].numberOfAdjacentMines += 1
+              table[i][j].numberOfAdjacentMines += 1
             }
           }
         }
-        field[x][y].isMine = true
+        table[x][y].isMine = true
         ++numberOfMine
       }
-    }  
+    }
 
-    return field
   }
 
 
   const [table, setTable] = useState([[]])
 
   function onPress(row, column){
+    if(isFirst){
+      createMines(row, column)
+      setIsFirst(false)
+    }
+    
     if(table[row][column].isFlagged ||
        table[row][column].isPressed ||
        !isPlay)
