@@ -5,9 +5,13 @@ import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image,
 
 const width = Dimensions.get("window").width
 
+const options = [
+                  {tableLength:6, numberOfMine:5},
+                  {tableLength:10, numberOfMine:16},
+                  {tableLength:12, numberOfMine:28}
+                ]
 export default function App() {
 
-  const LENGTH_OF_TABLE_EDGE = 10
   const modifierList = [
     [-1,-1],
     [-1, 0],
@@ -21,19 +25,21 @@ export default function App() {
 
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
+  const [difficulty, setDifficulty] = useState(0)
+
 
   function generateTable(){
     setIsPlay(true)
     setIsFirst(true)
 
-    const field = new Array(LENGTH_OF_TABLE_EDGE)
+    const field = new Array(options[difficulty].tableLength)
 
-    for(let i = 0; i < LENGTH_OF_TABLE_EDGE; ++i)
-      field[i] = new Array(LENGTH_OF_TABLE_EDGE)
+    for(let i = 0; i < options[difficulty].tableLength; ++i)
+      field[i] = new Array(options[difficulty].tableLength)
 
-    for(let i = 0; i < LENGTH_OF_TABLE_EDGE; ++i){
-      for(let j = 0; j < LENGTH_OF_TABLE_EDGE; ++j){
-        let cell = {
+    for(let i = 0; i < options[difficulty].tableLength; ++i){
+      for(let j = 0; j < options[difficulty].tableLength; ++j){
+        field[i][j] = {
           isMine: false,
           row: i,
           column: j,
@@ -41,7 +47,6 @@ export default function App() {
           isPressed: false,
           isFlagged: false,
         }
-        field[i][j] = cell
       }
     }
 
@@ -52,9 +57,9 @@ export default function App() {
 
     let numberOfMine = 0
 
-    while(numberOfMine < 20){
-      let x = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
-      let y = Math.floor(Math.random() * LENGTH_OF_TABLE_EDGE)
+    while(numberOfMine < options[difficulty].numberOfMine){
+      let x = Math.floor(Math.random() * options[difficulty].tableLength)
+      let y = Math.floor(Math.random() * options[difficulty].tableLength)
 
       if(!table[x][y].isMine &&
           (x < firstTouchRow-1 || x > firstTouchRow+1 ||
@@ -63,7 +68,7 @@ export default function App() {
       {
         for(let i = x-1; i < x+2; ++i){
           for(let j = y-1; j < y+2; ++j){
-            if(i >= 0 && i < LENGTH_OF_TABLE_EDGE && j >= 0 && j < LENGTH_OF_TABLE_EDGE){
+            if(i >= 0 && i < options[difficulty].tableLength && j >= 0 && j < options[difficulty].tableLength){
               table[i][j].numberOfAdjacentMines += 1
             }
           }
@@ -104,9 +109,9 @@ export default function App() {
 
         modifierList.map(([rowModifier, columnModifier]) => {
           if(rowIndex+rowModifier >= 0 && 
-             rowIndex+rowModifier < LENGTH_OF_TABLE_EDGE && 
+             rowIndex+rowModifier < options[difficulty].tableLength && 
              columnIndex+columnModifier >= 0 &&
-             columnIndex+columnModifier < LENGTH_OF_TABLE_EDGE &&
+             columnIndex+columnModifier < options[difficulty].tableLength &&
              !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed)
           {
             newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed = true
@@ -138,7 +143,7 @@ export default function App() {
 
     [-1, 0, 1].forEach(rowModifier => {
       [-1, 0, 1].forEach(columnModifier => {
-        if(row+rowModifier >= 0 && row+rowModifier < LENGTH_OF_TABLE_EDGE && column+columnModifier >= 0 && column+columnModifier < LENGTH_OF_TABLE_EDGE)
+        if(row+rowModifier >= 0 && row+rowModifier < options[difficulty].tableLength && column+columnModifier >= 0 && column+columnModifier < options[difficulty].tableLength)
           onPress(row+rowModifier, column+columnModifier)
       })
     })
@@ -158,17 +163,32 @@ export default function App() {
     setTable(generateTable())
   },[])
 
+  useEffect(()=>{
+    setTable(generateTable())
+  },[difficulty])
+
 
   return (
     <View style={styles.container}>
+      <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : dark}} onPress={() => setDifficulty(0)}>
+          <Text style={{color:difficulty===0 ? dark : white}} >Easy</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : dark}} onPress={() => setDifficulty(1)}>
+          <Text style={{color:difficulty===1 ? dark : white}} >Medium</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : dark}} onPress={() => setDifficulty(2)}>
+          <Text style={{color:difficulty===2 ? dark : white}} >Hard</Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.table}>
         {table.map((row, rowIndex) =>
           <View style={styles.row} key={rowIndex} >
             {row.map((cell, cellIndex) => {
               return (
-                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/LENGTH_OF_TABLE_EDGE-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
-                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-1, height:width/LENGTH_OF_TABLE_EDGE-1, resizeMode: "contain"}} /> : 
-                  cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/LENGTH_OF_TABLE_EDGE-5, height:width/LENGTH_OF_TABLE_EDGE-5, resizeMode: "contain"}} /> :
+                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/options[difficulty].tableLength-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
+                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/options[difficulty].tableLength-1, height:width/options[difficulty].tableLength-1, resizeMode: "contain"}} /> : 
+                  cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/options[difficulty].tableLength-5, height:width/options[difficulty].tableLength-5, resizeMode: "contain"}} /> :
                   <Text>{cell.numberOfAdjacentMines}</Text> : null}
                 </Pressable>
               )
