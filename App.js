@@ -26,6 +26,8 @@ export default function App() {
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
   const [difficulty, setDifficulty] = useState(0)
+  const [numOfFlags, setNumOfFlag] = useState(0)
+  const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
 
 
   function generateTable(){
@@ -132,6 +134,14 @@ export default function App() {
       return
     
     let newTable = [...table]
+    if(newTable[row][column].isFlagged){
+      setNumOfFlag(prev => prev-1)
+      setNumOfActiveMines(prev => prev+1)
+    }
+    else{
+      setNumOfFlag(prev => prev+1)
+      setNumOfActiveMines(prev => prev-1)
+    }
 
     newTable[row][column].isFlagged = !newTable[row][column].isFlagged 
 
@@ -159,12 +169,20 @@ export default function App() {
 
   }
 
+  function onReset(){
+    setTable(generateTable())
+    setNumOfActiveMines(options[difficulty].numberOfMine)
+    setNumOfFlag(0)
+  }
+
   useEffect(() => {
     setTable(generateTable())
   },[])
 
   useEffect(()=>{
     setTable(generateTable())
+    setNumOfActiveMines(options[difficulty].numberOfMine)
+    setNumOfFlag(0)
   },[difficulty])
 
 
@@ -181,6 +199,20 @@ export default function App() {
           <Text style={{color:difficulty===2 ? dark : white}} >Hard</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
+        <Text style={{fontSize:24}} >{options[difficulty].numberOfMine}</Text>
+        <Image source={require("./assets/mine.png")} style={{width:30, aspectRatio:1, resizeMode: "contain"}} />
+        <Text style={{fontSize:24}} >-</Text>
+
+        <Text style={{fontSize:24}} >{numOfFlags}</Text>
+        <Image source={require("./assets/redFlag.png")} style={{width:30, aspectRatio:1, resizeMode: "contain"}} />
+
+        <Text style={{fontSize:24}} >=</Text>
+
+        <Text style={{fontSize:24}} >{numOfActiveMines}</Text>
+
+      </View>
       <View style={styles.table}>
         {table.map((row, rowIndex) =>
           <View style={styles.row} key={rowIndex} >
@@ -196,7 +228,7 @@ export default function App() {
           </View>
         )}
       </View>
-      <TouchableOpacity style={styles.btnReset} onPress={() => setTable(generateTable())}>
+      <TouchableOpacity style={styles.btnReset} onPress={onReset}>
         <Text>Reset</Text>
       </TouchableOpacity>
     </View>
