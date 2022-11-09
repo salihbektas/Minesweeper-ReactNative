@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image, Vibration} from 'react-native';
+import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image, Vibration, Switch} from 'react-native';
 
 
 const width = Dimensions.get("window").width
@@ -28,6 +28,7 @@ export default function App() {
   const [difficulty, setDifficulty] = useState(0)
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
+  const [isDarkMode, setIsDarkMode] = useState(false)
 
 
   function generateTable(){
@@ -187,20 +188,21 @@ export default function App() {
 
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: isDarkMode ? dark : white}}>
+      <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
       <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : dark}} onPress={() => setDifficulty(0)}>
-          <Text style={{color:difficulty===0 ? dark : white}} >Easy</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(0)}>
+          <Text style={{color:difficulty===0 || isDarkMode ? dark : white}} >Easy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : dark}} onPress={() => setDifficulty(1)}>
-          <Text style={{color:difficulty===1 ? dark : white}} >Medium</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(1)}>
+          <Text style={{color:difficulty===1 || isDarkMode ? dark : white}} >Medium</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : dark}} onPress={() => setDifficulty(2)}>
-          <Text style={{color:difficulty===2 ? dark : white}} >Hard</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(2)}>
+          <Text style={{color:difficulty===2 || isDarkMode ? dark : white}} >Hard</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
+      <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"80%", backgroundColor:"lightgrey", paddingVertical: 8, borderRadius: 6}}>
         <Text style={{fontSize:24}} >{options[difficulty].numberOfMine}</Text>
         <Image source={require("./assets/mine.png")} style={{width:30, aspectRatio:1, resizeMode: "contain"}} />
         <Text style={{fontSize:24}} >-</Text>
@@ -228,9 +230,21 @@ export default function App() {
           </View>
         )}
       </View>
-      <TouchableOpacity style={styles.btnReset} onPress={onReset}>
-        <Text>Reset</Text>
-      </TouchableOpacity>
+      <View style={{flexDirection:"row", width:"100%", justifyContent:"space-around"}}>
+        <TouchableOpacity style={styles.btnReset} onPress={onReset}>
+          <Text style={{fontSize:24}}>Reset</Text>
+        </TouchableOpacity>
+        <View style={styles.themeContainer}>
+          <Image source={require("./assets/sun.png")} style={{width:30, aspectRatio:1, resizeMode: "contain", marginRight: 10, marginLeft: 5}} />
+          <Switch
+            thumbColor = {isDarkMode ? redFlag : white}
+            trackColor = {{true: '#C04037'}}
+            onValueChange={() => setIsDarkMode(prev => !prev)}
+            value={isDarkMode}
+          />
+          <Image source={require("./assets/moon.png")} style={{width:40, aspectRatio:1, resizeMode: "contain"}} />
+        </View>
+      </View>
     </View>
   );
 }
@@ -244,7 +258,6 @@ const redFlag = '#F07067'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: white,
     alignItems: 'center',
     justifyContent: 'space-around',
     paddingTop: 25
@@ -264,9 +277,17 @@ const styles = StyleSheet.create({
   },
 
   btnReset: {
+    justifyContent: "center",
     backgroundColor: "lightgrey",
     borderRadius:6,
     paddingHorizontal: 18,
-    paddingVertical: 6
+    paddingVertical: 4
+  },
+
+  themeContainer: {
+    flexDirection: "row",
+    backgroundColor: "lightgrey",
+    alignItems: "center",
+    borderRadius: 6,
   }
 });
