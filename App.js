@@ -115,7 +115,8 @@ export default function App() {
              rowIndex+rowModifier < options[difficulty].tableLength && 
              columnIndex+columnModifier >= 0 &&
              columnIndex+columnModifier < options[difficulty].tableLength &&
-             !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed)
+             !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed &&
+             !newTable[rowIndex+rowModifier][columnIndex+columnModifier].isFlagged)
           {
             newTable[rowIndex+rowModifier][columnIndex+columnModifier].isPressed = true
             if(newTable[rowIndex+rowModifier][columnIndex+columnModifier].isMine)
