@@ -1,6 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image, Vibration, Switch} from 'react-native';
+
+import * as SplashScreen from 'expo-splash-screen';
+
+
+SplashScreen.preventAutoHideAsync()
 
 
 const width = Dimensions.get("window").width
@@ -29,6 +34,7 @@ export default function App() {
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [appIsReady, setAppIsReady] = useState(false)
 
 
   function generateTable(){
@@ -181,15 +187,39 @@ export default function App() {
     setTable(generateTable())
   },[])
 
+  useEffect(() => {
+    async function prepare() {
+      try {
+
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
   useEffect(()=>{
     setTable(generateTable())
     setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
   },[difficulty])
 
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   return (
-    <View style={{...styles.container, backgroundColor: isDarkMode ? dark : white}}>
+    <View style={{...styles.container, backgroundColor: isDarkMode ? dark : white}}
+    onLayout={onLayoutRootView} >
       <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
       <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
         <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(0)}>
