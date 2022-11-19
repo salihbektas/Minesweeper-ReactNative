@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useCallback } from 'react';
 import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image, Vibration, Switch} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -183,14 +184,35 @@ export default function App() {
     setNumOfFlag(0)
   }
 
-  useEffect(() => {
-    setTable(generateTable())
-  },[])
+  function changeDifficulty( selected ){
+    setDifficulty(selected)
+    try {
+      AsyncStorage.setItem('Difficulty', JSON.stringify(selected))
+    } catch (e) {
+      console.error("error on save Difficulty")
+    }
+  }
+
+  function changeTheme( isDarkSelected ){
+    setIsDarkMode(isDarkSelected)
+    try {
+      AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkSelected))
+    } catch (e) {
+      console.error("error on save DarkMode")
+    }
+  }
 
   useEffect(() => {
     async function prepare() {
       try {
-
+        const dif = await AsyncStorage.getItem('Difficulty')
+        if(dif !== null) {
+          setDifficulty(JSON.parse(dif))
+        }
+        const darkMdoe = await AsyncStorage.getItem('DarkMode')
+        if(darkMdoe !== null) {
+          setIsDarkMode(JSON.parse(darkMdoe))
+        }
       } catch (e) {
         console.warn(e);
       } finally {
@@ -199,6 +221,7 @@ export default function App() {
     }
 
     prepare();
+    setTable(generateTable())
   }, []);
 
   useEffect(()=>{
@@ -222,13 +245,13 @@ export default function App() {
     onLayout={onLayoutRootView} >
       <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
       <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(0)}>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(0)}>
           <Text style={{color:difficulty===0 || isDarkMode ? dark : white}} >Easy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(1)}>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(1)}>
           <Text style={{color:difficulty===1 || isDarkMode ? dark : white}} >Medium</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : isDarkMode ? white : dark}} onPress={() => setDifficulty(2)}>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(2)}>
           <Text style={{color:difficulty===2 || isDarkMode ? dark : white}} >Hard</Text>
         </TouchableOpacity>
       </View>
@@ -270,7 +293,7 @@ export default function App() {
           <Switch
             thumbColor = {isDarkMode ? redFlag : white}
             trackColor = {{true: '#C04037'}}
-            onValueChange={() => setIsDarkMode(prev => !prev)}
+            onValueChange={() => changeTheme(!isDarkMode)}
             value={isDarkMode}
           />
           <Image source={require("./assets/moon.png")} style={{width:40, aspectRatio:1, resizeMode: "contain"}} />
