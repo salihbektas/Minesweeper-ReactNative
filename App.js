@@ -274,9 +274,9 @@ export default function App() {
           <View style={styles.row} key={rowIndex} >
             {row.map((cell, cellIndex) => {
               return (
-                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/options[difficulty].tableLength-1, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
-                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/options[difficulty].tableLength-1, height:width/options[difficulty].tableLength-1, resizeMode: "contain"}} /> : 
-                  cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/options[difficulty].tableLength-5, height:width/options[difficulty].tableLength-5, resizeMode: "contain"}} /> :
+                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/options[difficulty].tableLength, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed, borderWidth: 1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
+                  {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/options[difficulty].tableLength, height:width/options[difficulty].tableLength, resizeMode: "contain"}} /> : 
+                  cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/options[difficulty].tableLength, height:width/options[difficulty].tableLength, resizeMode: "contain"}} /> :
                   <Text>{cell.numberOfAdjacentMines}</Text> : null}
                 </Pressable>
               )
@@ -318,7 +318,6 @@ const styles = StyleSheet.create({
   },
 
   table: {
-    backgroundColor: dark,
     width: "100%",
     aspectRatio: 1,
     justifyContent: "space-evenly",
