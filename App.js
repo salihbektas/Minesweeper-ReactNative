@@ -4,6 +4,8 @@ import { Dimensions, Pressable, StyleSheet, Text, TouchableOpacity, View, Image,
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as SplashScreen from 'expo-splash-screen';
+import Dashboard from './components/dashboard';
+import options from './options.json';
 
 
 SplashScreen.preventAutoHideAsync()
@@ -11,11 +13,7 @@ SplashScreen.preventAutoHideAsync()
 
 const width = Dimensions.get("window").width
 
-const options = [
-                  {tableLength:6, numberOfMine:5},
-                  {tableLength:10, numberOfMine:16},
-                  {tableLength:12, numberOfMine:28}
-                ]
+
 export default function App() {
 
   const modifierList = [
@@ -256,19 +254,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"80%", backgroundColor:"lightgrey", paddingVertical: 8, borderRadius: 6}}>
-        <Text style={{fontSize:24}} >{options[difficulty].numberOfMine}</Text>
-        <Image source={require("./assets/mine.png")} style={{width:30, aspectRatio:1, resizeMode: "contain"}} />
-        <Text style={{fontSize:24}} >-</Text>
-
-        <Text style={{fontSize:24}} >{numOfFlags}</Text>
-        <Image source={require("./assets/redFlag.png")} style={{width:30, aspectRatio:1, resizeMode: "contain"}} />
-
-        <Text style={{fontSize:24}} >=</Text>
-
-        <Text style={{fontSize:24}} >{numOfActiveMines}</Text>
-
-      </View>
+      <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
       <View style={styles.table}>
         {table.map((row, rowIndex) =>
           <View style={styles.row} key={rowIndex} >
