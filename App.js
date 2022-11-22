@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 import Dashboard from './components/dashboard';
 import options from './options.json';
+import colors from './colors';
 
 
 SplashScreen.preventAutoHideAsync()
@@ -239,18 +240,18 @@ export default function App() {
   }
 
   return (
-    <View style={{...styles.container, backgroundColor: isDarkMode ? dark : white}}
+    <View style={{...styles.container, backgroundColor: isDarkMode ? colors.dark : colors.white}}
     onLayout={onLayoutRootView} >
       <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
       <View style={{flexDirection:"row", justifyContent:"space-evenly", width:"100%"}}>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(0)}>
-          <Text style={{color:difficulty===0 || isDarkMode ? dark : white}} >Easy</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===0 ? colors.redFlag : isDarkMode ? colors.white : colors.dark}} onPress={() => changeDifficulty(0)}>
+          <Text style={{color:difficulty===0 || isDarkMode ? colors.dark : colors.white}} >Easy</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(1)}>
-          <Text style={{color:difficulty===1 || isDarkMode ? dark : white}} >Medium</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===1 ? colors.redFlag : isDarkMode ? colors.white : colors.dark}} onPress={() => changeDifficulty(1)}>
+          <Text style={{color:difficulty===1 || isDarkMode ? colors.dark : colors.white}} >Medium</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? redFlag : isDarkMode ? white : dark}} onPress={() => changeDifficulty(2)}>
-          <Text style={{color:difficulty===2 || isDarkMode ? dark : white}} >Hard</Text>
+        <TouchableOpacity style={{...styles.btnReset, backgroundColor: difficulty===2 ? colors.redFlag : isDarkMode ? colors.white : colors.dark}} onPress={() => changeDifficulty(2)}>
+          <Text style={{color:difficulty===2 || isDarkMode ? colors.dark : colors.white}} >Hard</Text>
         </TouchableOpacity>
       </View>
 
@@ -260,7 +261,7 @@ export default function App() {
           <View style={styles.row} key={rowIndex} >
             {row.map((cell, cellIndex) => {
               return (
-                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/options[difficulty].tableLength, aspectRatio:1, backgroundColor: cell.isPressed ? tileOpened : tileClosed, borderWidth: 1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
+                <Pressable style={{alignItems: "center", justifyContent: "center", width:width/options[difficulty].tableLength, aspectRatio:1, backgroundColor: cell.isPressed ? colors.tileOpened : colors.tileClosed, borderWidth: 1}} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
                   {cell.isFlagged ? <Image source={require("./assets/redFlag.png")} style={{width:width/options[difficulty].tableLength, height:width/options[difficulty].tableLength, resizeMode: "contain"}} /> : 
                   cell.isPressed ? cell.isMine ? <Image source={require("./assets/mine.png")} style={{width:width/options[difficulty].tableLength, height:width/options[difficulty].tableLength, resizeMode: "contain"}} /> :
                   <Text>{cell.numberOfAdjacentMines}</Text> : null}
@@ -277,7 +278,7 @@ export default function App() {
         <View style={styles.themeContainer}>
           <Image source={require("./assets/sun.png")} style={{width:30, aspectRatio:1, resizeMode: "contain", marginRight: 10, marginLeft: 5}} />
           <Switch
-            thumbColor = {isDarkMode ? redFlag : white}
+            thumbColor = {isDarkMode ? colors.redFlag : colors.white}
             trackColor = {{true: '#C04037'}}
             onValueChange={() => changeTheme(!isDarkMode)}
             value={isDarkMode}
@@ -289,11 +290,6 @@ export default function App() {
   );
 }
 
-const dark = '#13141F'
-const white = '#FCFCFC'
-const tileClosed = '#30B7FF'
-const tileOpened = '#6A7BFF'
-const redFlag = '#F07067'
 
 const styles = StyleSheet.create({
   container: {
