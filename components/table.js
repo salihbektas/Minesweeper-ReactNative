@@ -7,7 +7,6 @@ const width = Dimensions.get("window").width
 
 export default function Table({ table, setTable, difficulty, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines }) {
 
-
     const modifierList = [
         [-1, -1],
         [-1,  0],
@@ -18,7 +17,6 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         [ 1,  0],
         [ 1,  1]
     ]
-
 
     function onPress(row, column) {
         if (isFirst) {
@@ -44,7 +42,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
             while (neighbourTileStack.length > 0) {
                 const [rowIndex, columnIndex] = neighbourTileStack.pop()
 
-                modifierList.map(([rowModifier, columnModifier]) => {
+                modifierList.forEach(([rowModifier, columnModifier]) => {
                     if (rowIndex + rowModifier >= 0 &&
                         rowIndex + rowModifier < options[difficulty].tableLength &&
                         columnIndex + columnModifier >= 0 &&
@@ -86,11 +84,9 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
     function openAllNeighbour(row, column) {
 
-        [-1, 0, 1].forEach(rowModifier => {
-            [-1, 0, 1].forEach(columnModifier => {
-                if (row + rowModifier >= 0 && row + rowModifier < options[difficulty].tableLength && column + columnModifier >= 0 && column + columnModifier < options[difficulty].tableLength)
-                    onPress(row + rowModifier, column + columnModifier)
-            })
+        modifierList.forEach(([rowModifier, columnModifier]) => {
+            if (row + rowModifier >= 0 && row + rowModifier < options[difficulty].tableLength && column + columnModifier >= 0 && column + columnModifier < options[difficulty].tableLength)
+                onPress(row + rowModifier, column + columnModifier)
         })
     }
 
@@ -101,7 +97,6 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
             openAllNeighbour(row, column)
         else
             onFlag(row, column)
-
     }
 
     function createMines(firstTouchRow, firstTouchColumn) {
