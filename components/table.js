@@ -130,10 +130,14 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
                 <View style={styles.row} key={rowIndex} >
                     {row.map((cell, cellIndex) => {
                         return (
-                            <Pressable style={{ alignItems: "center", justifyContent: "center", width: width / options[difficulty].tableLength, aspectRatio: 1, backgroundColor: cell.isPressed ? colors.tileOpened : colors.tileClosed, borderWidth: 1 }} key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} onLongPress={() => onLongPress(rowIndex, cellIndex)} >
+                            <Pressable style={{ ...styles.tile, backgroundColor: cell.isPressed ? colors.tileOpened : colors.tileClosed, width: width / options[difficulty].tableLength }} 
+                                key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} 
+                                onLongPress={() => onLongPress(rowIndex, cellIndex)} >
+
                                 {cell.isFlagged ? <Image source={require("../assets/redFlag.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
                                     cell.isPressed ? cell.isMine ? <Image source={require("../assets/mine.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
                                         <Text>{cell.numberOfAdjacentMines}</Text> : null}
+
                             </Pressable>
                         )
                     })}
@@ -156,5 +160,12 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
     },
+    
+    tile : {
+        alignItems: "center", 
+        justifyContent: "center", 
+        aspectRatio: 1, 
+        borderWidth: 1
+    }
 
 });

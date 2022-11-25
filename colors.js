@@ -3,6 +3,8 @@ const colors = {
     white : '#FCFCFC',
     tileClosed : '#30B7FF',
     tileOpened : '#6A7BFF',
-    redFlag : '#F07067'
+    red : '#F07067',
+    lightgrey: '#D3D3D3',
+    darkRed: '#C04037'
 }
 export default colors;

@@ -105,29 +105,38 @@ export default function App() {
 
   return (
     <View style={{...styles.container, backgroundColor: isDarkMode ? colors.dark : colors.white}}
-    onLayout={onLayoutRootView} >
+      onLayout={onLayoutRootView} >
+
       <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
       
       <DifficultySelector difficulty={difficulty} setDifficulty={setDifficulty} isDarkMode={isDarkMode} />
 
       <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
 
-      <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst} isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} setNumOfActiveMines={setNumOfActiveMines} />
+      <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst} 
+        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} setNumOfActiveMines={setNumOfActiveMines} />
 
-      <View style={{flexDirection:"row", width:"100%", justifyContent:"space-around"}}>
+      <View style={styles.footer}>
+
         <TouchableOpacity style={styles.btnReset} onPress={onReset}>
           <Text style={{fontSize:24}}>Reset</Text>
         </TouchableOpacity>
+
         <View style={styles.themeContainer}>
-          <Image source={require("./assets/sun.png")} style={{width:30, aspectRatio:1, resizeMode: "contain", marginRight: 10, marginLeft: 5}} />
+
+          <Image source={require("./assets/sun.png")} style={styles.sunIcon} />
+
           <Switch
-            thumbColor = {isDarkMode ? colors.redFlag : colors.white}
-            trackColor = {{true: '#C04037'}}
+            thumbColor = {isDarkMode ? colors.red : colors.white}
+            trackColor = {{true: colors.darkRed}}
             onValueChange={() => changeTheme(!isDarkMode)}
             value={isDarkMode}
           />
-          <Image source={require("./assets/moon.png")} style={{width:40, aspectRatio:1, resizeMode: "contain"}} />
+
+          <Image source={require("./assets/moon.png")} style={styles.moonIcon} />
+
         </View>
+
       </View>
     </View>
   );
@@ -155,5 +164,26 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey",
     alignItems: "center",
     borderRadius: 6,
+  },
+
+  footer: {
+    flexDirection:"row", 
+    width:"100%", 
+    justifyContent:"space-around"
+  },
+
+  sunIcon: {
+    width:30, 
+    aspectRatio:1, 
+    resizeMode: "contain", 
+    marginRight: 10, 
+    marginLeft: 5
+  },
+
+  moonIcon: {
+    width:40, 
+    aspectRatio:1, 
+    resizeMode: "contain"
   }
+
 });

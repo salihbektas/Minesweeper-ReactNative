@@ -16,24 +16,28 @@ export default function DifficultySelector({ difficulty, setDifficulty, isDarkMo
 
     return (
         <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "100%" }}>
-            <TouchableOpacity style={{ ...styles.btnReset, backgroundColor: difficulty === 0 ? colors.redFlag : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(0)}>
+
+            <TouchableOpacity style={{ ...styles.button, backgroundColor: difficulty === 0 ? colors.red : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(0)}>
                 <Text style={{ color: difficulty === 0 || isDarkMode ? colors.dark : colors.white }} >Easy</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.btnReset, backgroundColor: difficulty === 1 ? colors.redFlag : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(1)}>
+            
+            <TouchableOpacity style={{ ...styles.button, backgroundColor: difficulty === 1 ? colors.red : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(1)}>
                 <Text style={{ color: difficulty === 1 || isDarkMode ? colors.dark : colors.white }} >Medium</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={{ ...styles.btnReset, backgroundColor: difficulty === 2 ? colors.redFlag : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(2)}>
+            
+            <TouchableOpacity style={{ ...styles.button, backgroundColor: difficulty === 2 ? colors.red : isDarkMode ? colors.white : colors.dark }} onPress={() => changeDifficulty(2)}>
                 <Text style={{ color: difficulty === 2 || isDarkMode ? colors.dark : colors.white }} >Hard</Text>
             </TouchableOpacity>
+        
         </View>
     )
 
 }
 
 const styles = StyleSheet.create({ 
-    btnReset: {
+    button: {
       justifyContent: "center",
-      backgroundColor: "lightgrey",
+      backgroundColor: colors.lightgrey,
       borderRadius:6,
       paddingHorizontal: 18,
       paddingVertical: 4
