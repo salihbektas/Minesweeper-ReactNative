@@ -130,7 +130,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
                 <View style={styles.row} key={rowIndex} >
                     {row.map((cell, cellIndex) => {
                         return (
-                            <Pressable style={{ ...styles.tile, backgroundColor: cell.isPressed ? colors.tileOpened : colors.tileClosed, width: width / options[difficulty].tableLength }} 
+                            <Pressable style={{ ...styles.tile, backgroundColor: cell.isPressed ? cell.isMine ? colors.darkRed : colors.tileOpened : colors.tileClosed, width: width / options[difficulty].tableLength }} 
                                 key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} 
                                 onLongPress={() => onLongPress(rowIndex, cellIndex)} >
 
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-evenly",
     },
-    
+
     tile : {
         alignItems: "center", 
         justifyContent: "center", 
