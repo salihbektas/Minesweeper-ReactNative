@@ -9,7 +9,7 @@ Required to have Node.js pre-installed on your system
 run:
 
 ```
->npm isntall
+>npm install
 >npx expo start
 ```
 
