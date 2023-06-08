@@ -1,7 +1,7 @@
 import { View, Text, Dimensions, Pressable, StyleSheet, Image, Vibration } from "react-native";
 
-import options from '../options.json';
-import colors from '../colors';
+import options from '../../options.json';
+import colors from '../../colors';
 
 const width = Dimensions.get("window").width
 
@@ -134,8 +134,8 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
                                 key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} 
                                 onLongPress={() => onLongPress(rowIndex, cellIndex)} >
 
-                                {cell.isFlagged ? <Image source={require("../assets/redFlag.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
-                                    cell.isPressed ? cell.isMine ? <Image source={require("../assets/mine.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
+                                {cell.isFlagged ? <Image source={require("../../assets/redFlag.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
+                                    cell.isPressed ? cell.isMine ? <Image source={require("../../assets/mine.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
                                         <Text>{cell.numberOfAdjacentMines}</Text> : null}
 
                             </Pressable>

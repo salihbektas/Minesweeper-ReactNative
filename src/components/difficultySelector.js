@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import colors from '../colors';
+import colors from '../../colors';
 
 export default function DifficultySelector({ difficulty, setDifficulty, isDarkMode }) {
 
