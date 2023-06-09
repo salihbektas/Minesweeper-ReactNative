@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, Switch} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Switch, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as SplashScreen from 'expo-splash-screen';
@@ -14,7 +14,7 @@ import Table from '../../components/table';
 SplashScreen.preventAutoHideAsync()
 
 
-export default function Game() {
+export default function Game({ navigation }) {
 
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
@@ -122,6 +122,10 @@ export default function Game() {
           <Text style={{fontSize:24}}>Reset</Text>
         </TouchableOpacity>
 
+        <Pressable onPress={() => navigation.navigate('Settings')} >
+          <Image source={require("../../../assets/setting.png")} style={styles.settings(isDarkMode)} />
+        </Pressable>
+
         <View style={styles.themeContainer}>
 
           <Image source={require("../../../assets/sun.png")} style={styles.sunIcon} />
@@ -171,6 +175,12 @@ const styles = StyleSheet.create({
     width:"100%", 
     justifyContent:"space-around"
   },
+
+  settings: (darkMode) => ({
+    height: 45,
+    aspectRatio: 1,
+    tintColor: darkMode ? colors.white : colors.dark,
+  }),
 
   sunIcon: {
     width:30, 

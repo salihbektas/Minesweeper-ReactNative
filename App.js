@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import * as SplashScreen from 'expo-splash-screen';
 import Game from './src/screens/Game/Game';
+import Settings from './src/screens/Settings/Settings';
 
 
 SplashScreen.preventAutoHideAsync()
@@ -16,6 +17,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Game" component={Game} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   );
