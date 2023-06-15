@@ -9,6 +9,8 @@ import options from '../../../options.json';
 import colors from '../../../colors';
 import DifficultySelector from '../../components/difficultySelector';
 import Table from '../../components/table';
+import { useAtomValue } from 'jotai';
+import { store } from '../../store';
 
 
 SplashScreen.preventAutoHideAsync()
@@ -21,7 +23,7 @@ export default function Game({ navigation }) {
   const [difficulty, setDifficulty] = useState(0)
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  const isDarkMode = useAtomValue(store).darkMode
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
 
@@ -57,7 +59,6 @@ export default function Game({ navigation }) {
   }
 
   function changeTheme( isDarkSelected ){
-    setIsDarkMode(isDarkSelected)
     try {
       AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkSelected))
     } catch (e) {
@@ -71,10 +72,6 @@ export default function Game({ navigation }) {
         const dif = await AsyncStorage.getItem('Difficulty')
         if(dif !== null) {
           setDifficulty(JSON.parse(dif))
-        }
-        const darkMdoe = await AsyncStorage.getItem('DarkMode')
-        if(darkMdoe !== null) {
-          setIsDarkMode(JSON.parse(darkMdoe))
         }
       } catch (e) {
         console.warn(e);
@@ -125,21 +122,6 @@ export default function Game({ navigation }) {
         <Pressable onPress={() => navigation.navigate('Settings')} >
           <Image source={require("../../../assets/setting.png")} style={styles.settings(isDarkMode)} />
         </Pressable>
-
-        <View style={styles.themeContainer}>
-
-          <Image source={require("../../../assets/sun.png")} style={styles.sunIcon} />
-
-          <Switch
-            thumbColor = {isDarkMode ? colors.red : colors.white}
-            trackColor = {{true: colors.darkRed}}
-            onValueChange={() => changeTheme(!isDarkMode)}
-            value={isDarkMode}
-          />
-
-          <Image source={require("../../../assets/moon.png")} style={styles.moonIcon} />
-
-        </View>
 
       </View>
     </View>
