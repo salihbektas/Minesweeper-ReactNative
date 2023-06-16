@@ -10,6 +10,15 @@ export default function Settings({ navigation }) {
 
   const [data, setData] = useAtom(store)
 
+
+
+  function changeDifficulty() {
+    let newDifficulty = data.difficulty + 1
+    if (newDifficulty > 2) newDifficulty = 0
+
+    setData((data) => ({...data, difficulty: newDifficulty}))
+  }
+
   return (
     <View style={styles.container(data.darkMode)} >
       <View style={styles.dashboard} >
@@ -21,6 +30,10 @@ export default function Settings({ navigation }) {
 
       <View style={styles.main} >
         <Button onPress={() => setData((data) => ({...data, darkMode: !data.darkMode}))} title="change theme"/>
+
+        <Button onPress={changeDifficulty} title="change difficulty"/>
+
+        <Text style={styles.feedbackText(data.darkMode)}>{`Selected difficulty:\n${data.difficulty === 0 ? 'easy' : data.difficulty === 1 ? 'medium' : 'hard'}`}</Text>
       </View>
     </View>
   )
@@ -56,8 +69,14 @@ const styles = StyleSheet.create({
 
   main: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center"
-  }
+  },
+
+  feedbackText: (darkMode) => ({
+    color: darkMode ? colors.white : colors.dark,
+    fontSize: 24,
+    fontWeight: "600"
+  })
 
 })

@@ -7,7 +7,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import Dashboard from '../../components/dashboard';
 import options from '../../../options.json';
 import colors from '../../../colors';
-import DifficultySelector from '../../components/difficultySelector';
 import Table from '../../components/table';
 import { useAtomValue } from 'jotai';
 import { store } from '../../store';
@@ -20,7 +19,7 @@ export default function Game({ navigation }) {
 
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
-  const [difficulty, setDifficulty] = useState(0)
+  const difficulty = useAtomValue(store).difficulty
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
   const isDarkMode = useAtomValue(store).darkMode
@@ -71,7 +70,7 @@ export default function Game({ navigation }) {
       try {
         const dif = await AsyncStorage.getItem('Difficulty')
         if(dif !== null) {
-          setDifficulty(JSON.parse(dif))
+          //setDifficulty(JSON.parse(dif))
         }
       } catch (e) {
         console.warn(e);
@@ -105,8 +104,7 @@ export default function Game({ navigation }) {
       onLayout={onLayoutRootView} >
 
       <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
-      
-      <DifficultySelector difficulty={difficulty} setDifficulty={setDifficulty} isDarkMode={isDarkMode} />
+    
 
       <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
 
