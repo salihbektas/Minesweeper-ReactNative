@@ -107,12 +107,12 @@ export default function Game({ navigation }) {
 
       <View style={styles.topSide}>
 
-        <TouchableOpacity style={styles.btnReset} onPress={onReset}>
-          <Text style={{ fontSize: 24 }}>Reset</Text>
-        </TouchableOpacity>
+        <Pressable onPress={onReset}>
+          <Image source={require("../../../assets/reset.png")} style={styles.icon(isDarkMode)} />
+        </Pressable>
 
         <Pressable onPress={() => navigation.navigate('Settings')} >
-          <Image source={require("../../../assets/setting.png")} style={styles.settings(isDarkMode)} />
+          <Image source={require("../../../assets/setting.png")} style={styles.icon(isDarkMode)} />
         </Pressable>
 
       </View>
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around"
   },
 
-  settings: (darkMode) => ({
+  icon: (darkMode) => ({
     height: 45,
     aspectRatio: 1,
     tintColor: darkMode ? colors.white : colors.dark,
