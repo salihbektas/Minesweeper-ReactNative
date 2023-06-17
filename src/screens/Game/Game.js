@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, Switch, Pressable} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image, Switch, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as SplashScreen from 'expo-splash-screen';
@@ -26,17 +26,17 @@ export default function Game({ navigation }) {
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
 
-  function generateTable(){
+  function generateTable() {
     setIsPlay(true)
     setIsFirst(true)
 
     const field = new Array(options[difficulty].tableLength)
 
-    for(let i = 0; i < options[difficulty].tableLength; ++i)
+    for (let i = 0; i < options[difficulty].tableLength; ++i)
       field[i] = new Array(options[difficulty].tableLength)
 
-    for(let i = 0; i < options[difficulty].tableLength; ++i){
-      for(let j = 0; j < options[difficulty].tableLength; ++j){
+    for (let i = 0; i < options[difficulty].tableLength; ++i) {
+      for (let j = 0; j < options[difficulty].tableLength; ++j) {
         field[i][j] = {
           isMine: false,
           row: i,
@@ -51,13 +51,13 @@ export default function Game({ navigation }) {
     return field
   }
 
-  function onReset(){
+  function onReset() {
     setTable(generateTable())
     setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
   }
 
-  function changeTheme( isDarkSelected ){
+  function changeTheme(isDarkSelected) {
     try {
       AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkSelected))
     } catch (e) {
@@ -69,7 +69,7 @@ export default function Game({ navigation }) {
     async function prepare() {
       try {
         const dif = await AsyncStorage.getItem('Difficulty')
-        if(dif !== null) {
+        if (dif !== null) {
           //setDifficulty(JSON.parse(dif))
         }
       } catch (e) {
@@ -83,11 +83,11 @@ export default function Game({ navigation }) {
     setTable(generateTable())
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     setTable(generateTable())
     setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
-  },[difficulty])
+  }, [difficulty])
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -100,21 +100,15 @@ export default function Game({ navigation }) {
   }
 
   return (
-    <View style={{...styles.container, backgroundColor: isDarkMode ? colors.dark : colors.white}}
+    <View style={{ ...styles.container, backgroundColor: isDarkMode ? colors.dark : colors.white }}
       onLayout={onLayoutRootView} >
 
-      <StatusBar style={isDarkMode ? 'light' : 'dark'}/>
-    
+      <StatusBar style={isDarkMode ? 'light' : 'dark'} />
 
-      <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
-
-      <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst} 
-        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} setNumOfActiveMines={setNumOfActiveMines} />
-
-      <View style={styles.footer}>
+      <View style={styles.topSide}>
 
         <TouchableOpacity style={styles.btnReset} onPress={onReset}>
-          <Text style={{fontSize:24}}>Reset</Text>
+          <Text style={{ fontSize: 24 }}>Reset</Text>
         </TouchableOpacity>
 
         <Pressable onPress={() => navigation.navigate('Settings')} >
@@ -122,6 +116,14 @@ export default function Game({ navigation }) {
         </Pressable>
 
       </View>
+
+
+      <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
+
+
+      <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst}
+        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} setNumOfActiveMines={setNumOfActiveMines} />
+
     </View>
   );
 }
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
   btnReset: {
     justifyContent: "center",
     backgroundColor: "lightgrey",
-    borderRadius:6,
+    borderRadius: 6,
     paddingHorizontal: 18,
     paddingVertical: 4
   },
@@ -150,10 +152,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
 
-  footer: {
-    flexDirection:"row", 
-    width:"100%", 
-    justifyContent:"space-around"
+  topSide: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-around"
   },
 
   settings: (darkMode) => ({
@@ -163,16 +165,16 @@ const styles = StyleSheet.create({
   }),
 
   sunIcon: {
-    width:30, 
-    aspectRatio:1, 
-    resizeMode: "contain", 
-    marginRight: 10, 
+    width: 30,
+    aspectRatio: 1,
+    resizeMode: "contain",
+    marginRight: 10,
     marginLeft: 5
   },
 
   moonIcon: {
-    width:40, 
-    aspectRatio:1, 
+    width: 40,
+    aspectRatio: 1,
     resizeMode: "contain"
   }
 
