@@ -10,6 +10,7 @@ import colors from '../../../colors';
 import Table from '../../components/table';
 import { useAtomValue } from 'jotai';
 import { store } from '../../store';
+import useInterval from 'use-interval';
 
 
 SplashScreen.preventAutoHideAsync()
@@ -19,6 +20,7 @@ export default function Game({ navigation }) {
 
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
+  const [time, setTime] = useState(0)
   const difficulty = useAtomValue(store).difficulty
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
@@ -52,6 +54,7 @@ export default function Game({ navigation }) {
   }
 
   function onReset() {
+    setTime(0)
     setTable(generateTable())
     setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
@@ -89,6 +92,12 @@ export default function Game({ navigation }) {
     setNumOfFlag(0)
   }, [difficulty])
 
+  function formatTime(time) {
+    return new Date(time * 1000).toISOString().slice(14, 19);
+  }
+
+  useInterval(() => setTime(t => t + 1), isPlay && !isFirst && 1000)
+
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
@@ -110,6 +119,8 @@ export default function Game({ navigation }) {
         <Pressable onPress={onReset}>
           <Image source={require("../../../assets/reset.png")} style={styles.icon(isDarkMode)} />
         </Pressable>
+
+        <Text style={styles.timer(isDarkMode)}>{formatTime(time)}</Text>
 
         <Pressable onPress={() => navigation.navigate('Settings')} >
           <Image source={require("../../../assets/setting.png")} style={styles.icon(isDarkMode)} />
@@ -145,6 +156,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4
   },
 
+  timer: (darkMode) => ({
+    color: darkMode ? colors.white : colors.dark,
+    fontSize: 45,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  }),
+
   themeContainer: {
     flexDirection: "row",
     backgroundColor: "lightgrey",
@@ -159,6 +177,7 @@ const styles = StyleSheet.create({
   },
 
   icon: (darkMode) => ({
+    marginTop: 7,
     height: 45,
     aspectRatio: 1,
     tintColor: darkMode ? colors.white : colors.dark,
