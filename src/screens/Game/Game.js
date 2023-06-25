@@ -133,7 +133,8 @@ export default function Game({ navigation }) {
 
 
       <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst}
-        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} setNumOfActiveMines={setNumOfActiveMines} />
+        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} 
+        setNumOfActiveMines={setNumOfActiveMines} />
 
     </View>
   );

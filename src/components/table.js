@@ -1,5 +1,4 @@
 import { View, Text, Dimensions, Pressable, StyleSheet, Image, Vibration } from "react-native";
-
 import options from '../../options.json';
 import colors from '../../colors';
 
@@ -18,6 +17,17 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         [ 1,  1]
     ]
 
+    function isFinish() {
+        for (let i = 0; i < table.length; ++i) {
+          for (let j = 0; j < table.length; ++j) {
+              if(!table[i][j].isPressed && ((table[i][j].isFlagged && !table[i][j].isMine) || (!table[i][j].isFlagged && table[i][j].isMine) || (!table[i][j].isFlagged && !table[i][j].isMine)))
+                return false
+          }
+        }
+
+        return true
+      }
+
     function onPress(row, column) {
         if (isFirst) {
             createMines(row, column)
@@ -31,8 +41,9 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
         let newTable = [...table]
         newTable[row][column].isPressed = true
-        if (newTable[row][column].isMine)
+        if (newTable[row][column].isMine){
             setIsPlay(false)
+        }
 
         if (newTable[row][column].numberOfAdjacentMines === 0) {
             let neighbourTileStack = []
@@ -50,8 +61,9 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
                         !newTable[rowIndex + rowModifier][columnIndex + columnModifier].isPressed &&
                         !newTable[rowIndex + rowModifier][columnIndex + columnModifier].isFlagged) {
                         newTable[rowIndex + rowModifier][columnIndex + columnModifier].isPressed = true
-                        if (newTable[rowIndex + rowModifier][columnIndex + columnModifier].isMine)
+                        if (newTable[rowIndex + rowModifier][columnIndex + columnModifier].isMine){
                             setIsPlay(false)
+                        }
                         if (newTable[rowIndex + rowModifier][columnIndex + columnModifier].numberOfAdjacentMines === 0)
                             neighbourTileStack.push([rowIndex + rowModifier, columnIndex + columnModifier])
                     }
@@ -60,6 +72,11 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         }
 
         setTable(newTable)
+
+        if(isFinish()){
+            setIsPlay(false)
+        }
+
     }
 
     function onFlag(row, column) {
@@ -80,6 +97,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
         setTable(newTable)
         Vibration.vibrate(100)
+
     }
 
     function openAllNeighbour(row, column) {
@@ -97,6 +115,10 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
             openAllNeighbour(row, column)
         else
             onFlag(row, column)
+
+        if(isFinish()){
+            setIsPlay(false)
+        }
     }
 
     function createMines(firstTouchRow, firstTouchColumn) {
