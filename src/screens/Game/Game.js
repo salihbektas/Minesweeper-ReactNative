@@ -8,12 +8,9 @@ import Dashboard from '../../components/dashboard';
 import options from '../../../options.json';
 import colors from '../../../colors';
 import Table from '../../components/table';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { store } from '../../store';
 import useInterval from 'use-interval';
-
-
-SplashScreen.preventAutoHideAsync()
 
 
 export default function Game({ navigation }) {
@@ -24,7 +21,9 @@ export default function Game({ navigation }) {
   const difficulty = useAtomValue(store).difficulty
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
-  const isDarkMode = useAtomValue(store).darkMode
+  const [data, setData] = useAtom(store)
+  const isDarkMode = data.darkMode
+
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
 
@@ -60,29 +59,24 @@ export default function Game({ navigation }) {
     setNumOfFlag(0)
   }
 
-  function changeTheme(isDarkSelected) {
-    try {
-      AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkSelected))
-    } catch (e) {
-      console.error("error on save DarkMode")
-    }
-  }
-
   useEffect(() => {
-    async function prepare() {
+    ;(async function prepare() {
       try {
         const dif = await AsyncStorage.getItem('Difficulty')
         if (dif !== null) {
           //setDifficulty(JSON.parse(dif))
+        }
+        const darkMode = await AsyncStorage.getItem('DarkMode')
+        if (darkMode !== null) {
+          setData((d) => ({...d, darkMode: JSON.parse(darkMode)}))
         }
       } catch (e) {
         console.warn(e);
       } finally {
         setAppIsReady(true);
       }
-    }
+    })()
 
-    prepare();
     setTable(generateTable())
   }, []);
 

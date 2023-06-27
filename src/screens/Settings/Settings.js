@@ -4,12 +4,15 @@ import colors from "../../../colors";
 import { useAtom } from "jotai";
 import { store } from "../../store";
 import DropDownPicker from "react-native-dropdown-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
 export default function Settings({ navigation }) {
 
   const [data, setData] = useAtom(store)
+
+  const darkMode = data.darkMode
 
   const [openTheme, setOpenTheme] = useState(false)
   const [themes, setThemes] = useState([{ label: 'DARK', value: true }, { label: 'LIGHT', value: false }])
@@ -26,6 +29,11 @@ export default function Settings({ navigation }) {
   }, [])
 
 
+  function changeTheme(isDarkMode) {
+
+    AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkMode())).catch(err => {console.error("error on save DarkMode", err)})
+    setData(d => ({...d, darkMode: isDarkMode()}))
+  }
 
   function changeDifficulty() {
     let newDifficulty = data.difficulty + 1
@@ -35,34 +43,34 @@ export default function Settings({ navigation }) {
   }
 
   return (
-    <View style={styles.container(data.darkMode)} >
+    <View style={styles.container(darkMode)} >
       <View style={styles.dashboard} >
         <Pressable onPress={() => navigation.goBack()} >
-          <Image source={require("../../../assets/arrow.png")} style={styles.back(data.darkMode)} />
+          <Image source={require("../../../assets/arrow.png")} style={styles.back(darkMode)} />
         </Pressable>
-        <Text style={styles.settingText(data.darkMode)}>Settings</Text>
+        <Text style={styles.settingText(darkMode)}>Settings</Text>
       </View>
 
       <View style={styles.main} >
 
         <View style={styles.row}>
-          <Text style={styles.text(data.darkMode)}>{'Theme:'}</Text>
+          <Text style={styles.text(darkMode)}>{'Theme:'}</Text>
           <DropDownPicker
             open={openTheme}
-            value={data.darkMode}
+            value={darkMode}
             items={themes}
             setOpen={setOpenTheme}
-            setValue={(newTheme) => setData((data) => ({...data, darkMode: newTheme()}))}
+            setValue={changeTheme}
             onOpen={onThemeOpen}
-            theme={data.darkMode ? 'LIGHT' : 'DARK'}
+            theme={darkMode ? 'LIGHT' : 'DARK'}
             containerStyle={styles.dropDownPicker}
-            style={styles.dropDownPickerStyle(data.darkMode)}
-            dropDownContainerStyle={styles.dropDownPickerStyle(data.darkMode)}
+            style={styles.dropDownPickerStyle(darkMode)}
+            dropDownContainerStyle={styles.dropDownPickerStyle(darkMode)}
           />
         </View>
 
         <View style={styles.row}>
-          <Text style={styles.text(data.darkMode)}>{'Difficulty:'}</Text>
+          <Text style={styles.text(darkMode)}>{'Difficulty:'}</Text>
           <DropDownPicker
             open={openDifficulties}
             value={data.difficulty}
@@ -70,14 +78,14 @@ export default function Settings({ navigation }) {
             setOpen={setOpenDifficulties}
             setValue={(newDifficulty) => setData((data) => ({...data, difficulty: newDifficulty()}))}
             onOpen={onColorCodeOpen}
-            theme={data.darkMode ? 'LIGHT' : 'DARK'}
+            theme={darkMode ? 'LIGHT' : 'DARK'}
             containerStyle={styles.dropDownPicker}
-            style={styles.dropDownPickerStyle(data.darkMode)}
-            dropDownContainerStyle={styles.dropDownPickerStyle(data.darkMode)}
+            style={styles.dropDownPickerStyle(darkMode)}
+            dropDownContainerStyle={styles.dropDownPickerStyle(darkMode)}
           />
         </View>
 
-        <Text style={styles.feedbackText(data.darkMode)}>{`Selected difficulty:\n${data.difficulty === 0 ? 'easy' : data.difficulty === 1 ? 'medium' : 'hard'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`Selected difficulty:\n${data.difficulty === 0 ? 'easy' : data.difficulty === 1 ? 'medium' : 'hard'}`}</Text>
       </View>
     </View>
   )
