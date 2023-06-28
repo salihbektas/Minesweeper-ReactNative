@@ -35,10 +35,9 @@ export default function Settings({ navigation }) {
     setData(d => ({...d, darkMode: isDarkMode()}))
   }
 
-  function changeDifficulty() {
-    let newDifficulty = data.difficulty + 1
-    if (newDifficulty > 2) newDifficulty = 0
-
+  function changeDifficulty(selectedDifficulty) {
+    let newDifficulty = selectedDifficulty()
+    AsyncStorage.setItem('Difficulty', JSON.stringify(newDifficulty)).catch(err => {console.error("error on save Difficulty", err)})
     setData((data) => ({...data, difficulty: newDifficulty}))
   }
 
@@ -76,7 +75,7 @@ export default function Settings({ navigation }) {
             value={data.difficulty}
             items={difficulties}
             setOpen={setOpenDifficulties}
-            setValue={(newDifficulty) => setData((data) => ({...data, difficulty: newDifficulty()}))}
+            setValue={changeDifficulty}
             onOpen={onColorCodeOpen}
             theme={darkMode ? 'LIGHT' : 'DARK'}
             containerStyle={styles.dropDownPicker}

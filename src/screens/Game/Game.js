@@ -64,7 +64,7 @@ export default function Game({ navigation }) {
       try {
         const dif = await AsyncStorage.getItem('Difficulty')
         if (dif !== null) {
-          //setDifficulty(JSON.parse(dif))
+          setData((d) => ({...d, difficulty: JSON.parse(dif)}))
         }
         const darkMode = await AsyncStorage.getItem('DarkMode')
         if (darkMode !== null) {
