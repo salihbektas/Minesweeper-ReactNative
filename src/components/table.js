@@ -1,10 +1,13 @@
 import { View, Text, Dimensions, Pressable, StyleSheet, Image, Vibration } from "react-native";
 import options from '../../options.json';
 import colors from '../../colors';
+import { useAtom } from "jotai";
+import { store } from "../store";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width
 
-export default function Table({ table, setTable, difficulty, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines }) {
+export default function Table({ table, setTable, difficulty, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines, time }) {
 
     const modifierList = [
         [-1, -1],
@@ -17,6 +20,8 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         [ 1,  1]
     ]
 
+    const [data, setData] = useAtom(store)
+
     function isFinish() {
         for (let i = 0; i < table.length; ++i) {
           for (let j = 0; j < table.length; ++j) {
@@ -26,7 +31,23 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         }
 
         return true
-      }
+    }
+
+    function saveRecord() {
+
+        if(difficulty === 0 && data.records.e === 0 || time < data.records.e){
+            setData({...data, records: {...data.records, e: time}})
+            AsyncStorage.setItem('Records', JSON.stringify({...data.records, e: time}))
+        }
+        if(difficulty === 1 && data.records.m === 0 || time < data.records.m){
+            setData({...data, records: {...data.records, m: time}})
+            AsyncStorage.setItem('Records', JSON.stringify({...data.records, m: time}))
+        }
+        if(difficulty === 2 && data.records.h === 0 || time < data.records.h){
+            setData({...data, records: {...data.records, h: time}})
+            AsyncStorage.setItem('Records', JSON.stringify({...data.records, h: time}))
+        }
+    }
 
     function onPress(row, column) {
         if (isFirst) {
@@ -75,6 +96,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
         if(isFinish()){
             setIsPlay(false)
+            saveRecord()
         }
 
     }
@@ -118,6 +140,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
         if(isFinish()){
             setIsPlay(false)
+            saveRecord()
         }
     }
 

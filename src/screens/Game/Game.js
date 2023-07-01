@@ -70,6 +70,10 @@ export default function Game({ navigation }) {
         if (darkMode !== null) {
           setData((d) => ({...d, darkMode: JSON.parse(darkMode)}))
         }
+        const records = await AsyncStorage.getItem('Records')
+        if (records !== null) {
+          setData((d) => ({...d, records: JSON.parse(records)}))
+        }
       } catch (e) {
         console.warn(e);
       } finally {
@@ -128,7 +132,7 @@ export default function Game({ navigation }) {
 
       <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst}
         isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} 
-        setNumOfActiveMines={setNumOfActiveMines} />
+        setNumOfActiveMines={setNumOfActiveMines} time={time} />
 
     </View>
   );

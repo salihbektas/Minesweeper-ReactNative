@@ -84,7 +84,11 @@ export default function Settings({ navigation }) {
           />
         </View>
 
-        <Text style={styles.feedbackText(darkMode)}>{`Selected difficulty:\n${data.difficulty === 0 ? 'easy' : data.difficulty === 1 ? 'medium' : 'hard'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>Records:</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`Easy: ${data.records.e ? data.records.e : 'not set'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`Medium: ${data.records.m ? data.records.m : 'not set'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`hard: ${data.records.h ? data.records.h : 'not set'}`}</Text>
+
       </View>
     </View>
   )
@@ -121,8 +125,7 @@ const styles = StyleSheet.create({
   main: {
     flex: 1,
     width: "100%",
-    justifyContent: "space-evenly",
-    alignItems: "center"
+    justifyContent: "space-evenly"
   },
 
   feedbackText: (darkMode) => ({
