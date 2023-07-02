@@ -11,6 +11,7 @@ import Table from '../../components/table';
 import { useAtom, useAtomValue } from 'jotai';
 import { store } from '../../store';
 import useInterval from 'use-interval';
+import { formatTime } from '../../utils';
 
 
 export default function Game({ navigation }) {
@@ -90,9 +91,6 @@ export default function Game({ navigation }) {
     setNumOfFlag(0)
   }, [difficulty])
 
-  function formatTime(time) {
-    return new Date(time * 1000).toISOString().slice(14, 19);
-  }
 
   useInterval(() => setTime(t => t + 1), isPlay && !isFirst && 1000)
 

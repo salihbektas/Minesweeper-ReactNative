@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import { store } from "../../store";
 import DropDownPicker from "react-native-dropdown-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { formatTime } from "../../utils";
 
 
 
@@ -85,9 +86,9 @@ export default function Settings({ navigation }) {
         </View>
 
         <Text style={styles.feedbackText(darkMode)}>Records:</Text>
-        <Text style={styles.feedbackText(darkMode)}>{`Easy: ${data.records.e ? data.records.e : 'not set'}`}</Text>
-        <Text style={styles.feedbackText(darkMode)}>{`Medium: ${data.records.m ? data.records.m : 'not set'}`}</Text>
-        <Text style={styles.feedbackText(darkMode)}>{`hard: ${data.records.h ? data.records.h : 'not set'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`Easy: ${data.records.e ? formatTime(data.records.e) : 'not set'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`Medium: ${data.records.m ? formatTime(data.records.m) : 'not set'}`}</Text>
+        <Text style={styles.feedbackText(darkMode)}>{`hard: ${data.records.h ? formatTime(data.records.h) : 'not set'}`}</Text>
 
       </View>
     </View>
