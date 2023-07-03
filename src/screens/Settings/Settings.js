@@ -35,9 +35,8 @@ export default function Settings({ navigation }) {
 
 
   function changeTheme(isDarkMode) {
-
-    AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkMode())).catch(err => { console.error("error on save DarkMode", err) })
-    setData(d => ({ ...d, darkMode: isDarkMode() }))
+    AsyncStorage.setItem('DarkMode', JSON.stringify(isDarkMode)).catch(err => { console.error("error on save DarkMode", err) })
+    setData(d => ({ ...d, darkMode: isDarkMode }))
   }
 
   function changeDifficulty(selectedDifficulty) {
@@ -88,18 +87,12 @@ export default function Settings({ navigation }) {
           ?
           <>
             <View style={styles.row}>
-              <Text style={styles.text(darkMode)}>{'Theme:'}</Text>
-              <DropDownPicker
-                open={openTheme}
+              <Text style={styles.text(darkMode)}>{'Dark Mode:'}</Text>
+              <Switch
+                thumbColor = {colors.tileOpened}
+                trackColor = {{true: colors.tileClosed, false: darkMode ? colors.white : colors.dark}}
+                onValueChange={changeTheme}
                 value={darkMode}
-                items={themes}
-                setOpen={setOpenTheme}
-                setValue={changeTheme}
-                onOpen={onThemeOpen}
-                theme={darkMode ? 'LIGHT' : 'DARK'}
-                containerStyle={styles.dropDownPicker}
-                style={styles.dropDownPickerStyle(darkMode)}
-                dropDownContainerStyle={styles.dropDownPickerStyle(darkMode)}
               />
             </View>
 
@@ -123,7 +116,7 @@ export default function Settings({ navigation }) {
               <Text style={styles.text(darkMode)}>{'Vibration:'}</Text>
               <Switch
                 thumbColor = {colors.tileOpened}
-                trackColor = {{true: colors.tileOpened, false: darkMode ? colors.white : colors.dark}}
+                trackColor = {{true: colors.tileClosed, false: darkMode ? colors.white : colors.dark}}
                 onValueChange={changeVibration}
                 value={vibration}
               />
