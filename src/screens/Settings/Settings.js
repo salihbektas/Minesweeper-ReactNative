@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Button, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Button, Image, Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import colors from "../../../colors";
 import { useAtom } from "jotai";
 import { store } from "../../store";
@@ -17,6 +17,7 @@ export default function Settings({ navigation }) {
   const [data, setData] = useAtom(store)
 
   const darkMode = data.darkMode
+  const vibration = data.vibration
 
   const [openTheme, setOpenTheme] = useState(false)
   const [themes, setThemes] = useState([{ label: 'DARK', value: true }, { label: 'LIGHT', value: false }])
@@ -43,6 +44,11 @@ export default function Settings({ navigation }) {
     let newDifficulty = selectedDifficulty()
     AsyncStorage.setItem('Difficulty', JSON.stringify(newDifficulty)).catch(err => { console.error("error on save Difficulty", err) })
     setData((data) => ({ ...data, difficulty: newDifficulty }))
+  }
+
+  function changeVibration() {
+    AsyncStorage.setItem('Vibration', JSON.stringify(!vibration)).catch(err => { console.error("error on save Vibration", err) })
+    setData((data) => ({ ...data, vibration: !vibration }))
   }
 
   return (
@@ -110,6 +116,16 @@ export default function Settings({ navigation }) {
                 containerStyle={styles.dropDownPicker}
                 style={styles.dropDownPickerStyle(darkMode)}
                 dropDownContainerStyle={styles.dropDownPickerStyle(darkMode)}
+              />
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.text(darkMode)}>{'Vibration:'}</Text>
+              <Switch
+                thumbColor = {colors.tileOpened}
+                trackColor = {{true: colors.tileOpened, false: darkMode ? colors.white : colors.dark}}
+                onValueChange={changeVibration}
+                value={vibration}
               />
             </View>
           </>

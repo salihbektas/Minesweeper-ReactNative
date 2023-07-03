@@ -22,6 +22,8 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
 
     const [data, setData] = useAtom(store)
 
+    const isVibrationEnabled = data.vibration
+
     function isFinish() {
         for (let i = 0; i < table.length; ++i) {
           for (let j = 0; j < table.length; ++j) {
@@ -118,7 +120,7 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
         newTable[row][column].isFlagged = !newTable[row][column].isFlagged
 
         setTable(newTable)
-        Vibration.vibrate(100)
+        isVibrationEnabled && Vibration.vibrate(100)
 
     }
 

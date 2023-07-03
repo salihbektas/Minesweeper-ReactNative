@@ -75,6 +75,10 @@ export default function Game({ navigation }) {
         if (records !== null) {
           setData((d) => ({...d, records: JSON.parse(records)}))
         }
+        const vibration = await AsyncStorage.getItem('Vibration')
+        if (vibration !== null) {
+          setData((d) => ({...d, vibration: JSON.parse(vibration)}))
+        }
       } catch (e) {
         console.warn(e);
       } finally {
