@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button, Image, Pressable, StyleSheet, Switch, Text, View } from "react-native";
+import { useState } from "react";
+import { Image, Pressable, StyleSheet, Switch, Text, View } from "react-native";
 import colors from "../../../colors";
 import { useAtom } from "jotai";
 import { store } from "../../store";
@@ -19,19 +19,8 @@ export default function Settings({ navigation }) {
   const darkMode = data.darkMode
   const vibration = data.vibration
 
-  const [openTheme, setOpenTheme] = useState(false)
-  const [themes, setThemes] = useState([{ label: 'DARK', value: true }, { label: 'LIGHT', value: false }])
-
   const [openDifficulties, setOpenDifficulties] = useState(false);
   const [difficulties, setDifficulties] = useState([{ label: 'Easy', value: 0 }, { label: 'Medium', value: 1 }, { label: 'Hard', value: 2 }])
-
-  const onThemeOpen = useCallback(() => {
-    setOpenDifficulties(false)
-  }, [])
-
-  const onColorCodeOpen = useCallback(() => {
-    setOpenTheme(false)
-  }, [])
 
 
   function changeTheme(isDarkMode) {
@@ -104,7 +93,6 @@ export default function Settings({ navigation }) {
                 items={difficulties}
                 setOpen={setOpenDifficulties}
                 setValue={changeDifficulty}
-                onOpen={onColorCodeOpen}
                 theme={darkMode ? 'LIGHT' : 'DARK'}
                 containerStyle={styles.dropDownPicker}
                 style={styles.dropDownPickerStyle(darkMode)}
@@ -117,7 +105,7 @@ export default function Settings({ navigation }) {
               <Switch
                 thumbColor = {colors.tileOpened}
                 trackColor = {{true: colors.tileClosed, false: darkMode ? colors.white : colors.dark}}
-                onValueChange={changeVibration}
+                onValueChange = {changeVibration}
                 value={vibration}
               />
             </View>

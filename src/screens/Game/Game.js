@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Image, Switch, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as SplashScreen from 'expo-splash-screen';
@@ -149,27 +149,12 @@ const styles = StyleSheet.create({
     paddingTop: 25
   },
 
-  btnReset: {
-    justifyContent: "center",
-    backgroundColor: "lightgrey",
-    borderRadius: 6,
-    paddingHorizontal: 18,
-    paddingVertical: 4
-  },
-
   timer: (darkMode) => ({
     color: darkMode ? colors.white : colors.dark,
     fontSize: 45,
     fontWeight: 'bold',
     textAlign: 'center'
   }),
-
-  themeContainer: {
-    flexDirection: "row",
-    backgroundColor: "lightgrey",
-    alignItems: "center",
-    borderRadius: 6,
-  },
 
   topSide: {
     flexDirection: "row",
@@ -182,20 +167,6 @@ const styles = StyleSheet.create({
     height: 45,
     aspectRatio: 1,
     tintColor: darkMode ? colors.white : colors.dark,
-  }),
-
-  sunIcon: {
-    width: 30,
-    aspectRatio: 1,
-    resizeMode: "contain",
-    marginRight: 10,
-    marginLeft: 5
-  },
-
-  moonIcon: {
-    width: 40,
-    aspectRatio: 1,
-    resizeMode: "contain"
-  }
+  })
 
 });
