@@ -129,10 +129,9 @@ export default function Game({ navigation }) {
       </View>
 
 
-      <Dashboard difficulty={difficulty} numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
+      <Dashboard numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
 
-
-      <Table table={table} setTable={setTable} difficulty={difficulty} isFirst={isFirst} setIsFirst={setIsFirst}
+      <Table table={table} setTable={setTable} isFirst={isFirst} setIsFirst={setIsFirst}
         isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} 
         setNumOfActiveMines={setNumOfActiveMines} time={time} />
 

@@ -1,7 +1,11 @@
 import { View, Image, Text } from "react-native"
 import options from '../../options.json';
+import { useAtomValue } from "jotai";
+import { store } from "../store";
 
-export default function Dashboard({difficulty, numOfFlags, numOfActiveMines}) {
+export default function Dashboard({ numOfFlags, numOfActiveMines }) {
+
+    const difficulty = useAtomValue(store).difficulty
 
     return (
         <View style={{ flexDirection: "row", justifyContent: "space-evenly", width: "80%", backgroundColor: "lightgrey", paddingVertical: 8, borderRadius: 6 }}>

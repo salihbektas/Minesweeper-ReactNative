@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width
 
-export default function Table({ table, setTable, difficulty, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines, time }) {
+export default function Table({ table, setTable, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines, time }) {
 
     const modifierList = [
         [-1, -1],
@@ -21,6 +21,8 @@ export default function Table({ table, setTable, difficulty, isFirst, setIsFirst
     ]
 
     const [data, setData] = useAtom(store)
+
+    const difficulty = data.difficulty
 
     const isVibrationEnabled = data.vibration
 
