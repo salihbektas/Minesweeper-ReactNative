@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const width = Dimensions.get("window").width
 
-export default function Table({ table, setTable, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, setNumOfActiveMines, time }) {
+export default function Table({ table, setTable, isFirst, setIsFirst, isPlay, setIsPlay, setNumOfFlag, time }) {
 
     const modifierList = [
         [-1, -1],
@@ -112,11 +112,9 @@ export default function Table({ table, setTable, isFirst, setIsFirst, isPlay, se
         let newTable = [...table]
         if (newTable[row][column].isFlagged) {
             setNumOfFlag(prev => prev - 1)
-            setNumOfActiveMines(prev => prev + 1)
         }
         else {
             setNumOfFlag(prev => prev + 1)
-            setNumOfActiveMines(prev => prev - 1)
         }
 
         newTable[row][column].isFlagged = !newTable[row][column].isFlagged

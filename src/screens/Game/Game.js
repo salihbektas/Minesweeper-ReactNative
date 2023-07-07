@@ -21,7 +21,6 @@ export default function Game({ navigation }) {
   const [time, setTime] = useState(0)
   const difficulty = useAtomValue(store).difficulty
   const [numOfFlags, setNumOfFlag] = useState(0)
-  const [numOfActiveMines, setNumOfActiveMines] = useState(options[difficulty].numberOfMine)
   const [data, setData] = useAtom(store)
   const isDarkMode = data.darkMode
 
@@ -56,7 +55,6 @@ export default function Game({ navigation }) {
   function onReset() {
     setTime(0)
     setTable(generateTable())
-    setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
   }
 
@@ -91,7 +89,6 @@ export default function Game({ navigation }) {
 
   useEffect(() => {
     setTable(generateTable())
-    setNumOfActiveMines(options[difficulty].numberOfMine)
     setNumOfFlag(0)
   }, [difficulty])
 
@@ -129,11 +126,11 @@ export default function Game({ navigation }) {
       </View>
 
 
-      <Dashboard numOfFlags={numOfFlags} numOfActiveMines={numOfActiveMines} />
+      <Dashboard numOfFlags={numOfFlags} />
 
       <Table table={table} setTable={setTable} isFirst={isFirst} setIsFirst={setIsFirst}
-        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} 
-        setNumOfActiveMines={setNumOfActiveMines} time={time} />
+        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} time={time} 
+      />
 
     </View>
   );
