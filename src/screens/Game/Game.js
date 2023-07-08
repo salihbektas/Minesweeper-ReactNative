@@ -90,8 +90,7 @@ export default function Game({ navigation }) {
   }, []);
 
   useEffect(() => {
-    setTable(generateTable())
-    setNumOfFlag(0)
+    onReset()
   }, [difficulty])
 
 
