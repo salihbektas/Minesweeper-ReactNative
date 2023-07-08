@@ -12,6 +12,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { store } from '../../store';
 import useInterval from 'use-interval';
 import { formatTime } from '../../utils';
+import { useIsFocused } from '@react-navigation/native';
 
 
 export default function Game({ navigation }) {
@@ -23,6 +24,7 @@ export default function Game({ navigation }) {
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [data, setData] = useAtom(store)
   const isDarkMode = data.darkMode
+  const isFocused = useIsFocused();
 
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
@@ -93,7 +95,7 @@ export default function Game({ navigation }) {
   }, [difficulty])
 
 
-  useInterval(() => setTime(t => t + 1), isPlay && !isFirst && 1000)
+  useInterval(() => setTime(t => t + 1), isPlay && !isFirst && isFocused && 1000)
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
