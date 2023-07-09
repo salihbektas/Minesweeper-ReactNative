@@ -107,7 +107,7 @@ export default function Game({ navigation }) {
   }
 
   return (
-    <View style={{ ...styles.container, backgroundColor: isDarkMode ? colors.dark : colors.white }}
+    <View style={styles.container(isDarkMode)}
       onLayout={onLayoutRootView} >
 
       <StatusBar style={isDarkMode ? 'light' : 'dark'} />
@@ -139,12 +139,13 @@ export default function Game({ navigation }) {
 
 
 const styles = StyleSheet.create({
-  container: {
+  container: (darkMode) => ({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
-    paddingTop: 25
-  },
+    paddingTop: 25,
+    backgroundColor: darkMode ? colors.dark : colors.white 
+  }),
 
   timer: (darkMode) => ({
     color: darkMode ? colors.white : colors.dark,

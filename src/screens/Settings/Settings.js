@@ -50,17 +50,14 @@ export default function Settings({ navigation }) {
           const isActive = index === selectedTab;
 
           return (
-            <View style={{ flex: 1 }} key={index}>
+            <View style={styles.tab} key={index}>
               <Pressable
                 onPress={() => {
                   setSelectedTab(index);
                 }}>
                 <View
-                  style={[
-                    styles.item(darkMode),
-                    isActive && { borderBottomColor: colors.tileOpened },
-                  ]}>
-                  <Text style={[styles.settingText(darkMode), isActive && { color: colors.tileOpened }]}>
+                  style={styles.item(darkMode, isActive)}>
+                  <Text style={styles.tabText(darkMode, isActive)}>
                     {item}
                   </Text>
                 </View>
@@ -146,18 +143,20 @@ const styles = StyleSheet.create({
     tintColor: darkMode ? colors.white : colors.dark,
   }),
 
-  settingText: (darkMode) => ({
-    color: darkMode ? colors.white : colors.dark,
+  tab: { flex: 1 },
+
+  tabText: (darkMode, isActive) => ({
+    color: isActive ? colors.tileOpened : darkMode ? colors.white : colors.dark,
     fontSize: 32,
     fontWeight: "700"
   }),
 
-  item: (darkMode) => ({
+  item: (darkMode, isActive) => ({
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 10,
-    borderColor: darkMode ? colors.dark : colors.white,
-    borderBottomWidth: 2,
+    borderColor: isActive ? colors.tileOpened : darkMode ? colors.dark : colors.white,
+    borderBottomWidth: 2
   }),
 
   main: {

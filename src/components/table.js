@@ -177,13 +177,17 @@ export default function Table({ table, setTable, isFirst, setIsFirst, isPlay, se
                 <View style={styles.row} key={rowIndex} >
                     {row.map((cell, cellIndex) => {
                         return (
-                            <Pressable style={{ ...styles.tile, backgroundColor: cell.isPressed ? cell.isMine ? colors.darkRed : colors.tileOpened : colors.tileClosed, width: width / options[difficulty].tableLength }} 
+                            <Pressable style={styles.tile(cell.isPressed, cell.isMine, difficulty)} 
                                 key={`${rowIndex}${cellIndex}`} onPress={() => onPress(rowIndex, cellIndex)} 
-                                onLongPress={() => onLongPress(rowIndex, cellIndex)} >
-
-                                {cell.isFlagged ? <Image source={require("../../assets/redFlag.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
-                                    cell.isPressed ? cell.isMine ? <Image source={require("../../assets/mine.png")} style={{ width: width / options[difficulty].tableLength, height: width / options[difficulty].tableLength, resizeMode: "contain" }} /> :
-                                        <Text>{cell.numberOfAdjacentMines}</Text> : null}
+                                onLongPress={() => onLongPress(rowIndex, cellIndex)} 
+                            >
+                                {cell.isFlagged 
+                                    ? <Image source={require("../../assets/redFlag.png")} style={styles.icon(difficulty)} />
+                                    : cell.isPressed 
+                                        ? cell.isMine 
+                                            ? <Image source={require("../../assets/mine.png")} style={styles.icon(difficulty)} />
+                                            : <Text>{cell.numberOfAdjacentMines}</Text>
+                                        : null}
 
                             </Pressable>
                         )
@@ -208,11 +212,19 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly",
     },
 
-    tile : {
+    tile: (isPressed, isMine, difficulty) => ({
         alignItems: "center", 
         justifyContent: "center", 
         aspectRatio: 1, 
-        borderWidth: 1
-    }
+        borderWidth: 1,
+        backgroundColor: isPressed ? isMine ? colors.darkRed : colors.tileOpened : colors.tileClosed,
+        width: width / options[difficulty].tableLength
+    }),
+
+    icon: (difficulty) => ({
+        width: width / options[difficulty].tableLength,
+        height: width / options[difficulty].tableLength,
+        resizeMode: "contain" 
+    })
 
 });
