@@ -24,7 +24,8 @@
     "use-interval": "^1.4.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "prettier": "3.0.0"
   },
   "private": true
 }

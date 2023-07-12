@@ -1,22 +1,20 @@
-import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState, useCallback } from 'react';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from "expo-status-bar"
+import { useEffect, useState, useCallback } from "react"
+import { StyleSheet, Text, View, Image, Pressable } from "react-native"
+import AsyncStorage from "@react-native-async-storage/async-storage"
 
-import * as SplashScreen from 'expo-splash-screen';
-import Dashboard from '../../components/dashboard';
-import options from '../../../options.json';
-import colors from '../../../colors';
-import Table from '../../components/table';
-import { useAtom, useAtomValue } from 'jotai';
-import { store } from '../../store';
-import useInterval from 'use-interval';
-import { formatTime } from '../../utils';
-import { useIsFocused } from '@react-navigation/native';
-
+import * as SplashScreen from "expo-splash-screen"
+import Dashboard from "../../components/dashboard"
+import options from "../../../options.json"
+import colors from "../../../colors"
+import Table from "../../components/table"
+import { useAtom, useAtomValue } from "jotai"
+import { store } from "../../store"
+import useInterval from "use-interval"
+import { formatTime } from "../../utils"
+import { useIsFocused } from "@react-navigation/native"
 
 export default function Game({ navigation }) {
-
   const [isPlay, setIsPlay] = useState(true)
   const [isFirst, setIsFirst] = useState(true)
   const [time, setTime] = useState(0)
@@ -24,7 +22,7 @@ export default function Game({ navigation }) {
   const [numOfFlags, setNumOfFlag] = useState(0)
   const [data, setData] = useAtom(store)
   const isDarkMode = data.darkMode
-  const isFocused = useIsFocused();
+  const isFocused = useIsFocused()
 
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
@@ -46,7 +44,7 @@ export default function Game({ navigation }) {
           column: j,
           numberOfAdjacentMines: 0,
           isPressed: false,
-          isFlagged: false,
+          isFlagged: false
         }
       }
     }
@@ -63,95 +61,103 @@ export default function Game({ navigation }) {
   useEffect(() => {
     ;(async function prepare() {
       try {
-        const dif = await AsyncStorage.getItem('Difficulty')
+        const dif = await AsyncStorage.getItem("Difficulty")
         if (dif !== null) {
-          setData((d) => ({...d, difficulty: JSON.parse(dif)}))
+          setData((d) => ({ ...d, difficulty: JSON.parse(dif) }))
         }
-        const darkMode = await AsyncStorage.getItem('DarkMode')
+        const darkMode = await AsyncStorage.getItem("DarkMode")
         if (darkMode !== null) {
-          setData((d) => ({...d, darkMode: JSON.parse(darkMode)}))
+          setData((d) => ({ ...d, darkMode: JSON.parse(darkMode) }))
         }
-        const records = await AsyncStorage.getItem('Records')
+        const records = await AsyncStorage.getItem("Records")
         if (records !== null) {
-          setData((d) => ({...d, records: JSON.parse(records)}))
+          setData((d) => ({ ...d, records: JSON.parse(records) }))
         }
-        const vibration = await AsyncStorage.getItem('Vibration')
+        const vibration = await AsyncStorage.getItem("Vibration")
         if (vibration !== null) {
-          setData((d) => ({...d, vibration: JSON.parse(vibration)}))
+          setData((d) => ({ ...d, vibration: JSON.parse(vibration) }))
         }
       } catch (e) {
-        console.warn(e);
+        console.warn(e)
       } finally {
-        setAppIsReady(true);
+        setAppIsReady(true)
       }
     })()
 
     setTable(generateTable())
-  }, []);
+  }, [])
 
   useEffect(() => {
     onReset()
   }, [difficulty])
 
-
-  useInterval(() => setTime(t => t + 1), isPlay && !isFirst && isFocused && 1000)
+  useInterval(
+    () => setTime((t) => t + 1),
+    isPlay && !isFirst && isFocused && 1000
+  )
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      await SplashScreen.hideAsync();
+      await SplashScreen.hideAsync()
     }
-  }, [appIsReady]);
+  }, [appIsReady])
 
   if (!appIsReady) {
-    return null;
+    return null
   }
 
   return (
-    <View style={styles.container(isDarkMode)}
-      onLayout={onLayoutRootView} >
-
-      <StatusBar style={isDarkMode ? 'light' : 'dark'} />
+    <View style={styles.container(isDarkMode)} onLayout={onLayoutRootView}>
+      <StatusBar style={isDarkMode ? "light" : "dark"} />
 
       <View style={styles.topSide}>
-
         <Pressable onPress={onReset}>
-          <Image source={require("../../../assets/reset.png")} style={styles.icon(isDarkMode)} />
+          <Image
+            source={require("../../../assets/reset.png")}
+            style={styles.icon(isDarkMode)}
+          />
         </Pressable>
 
         <Text style={styles.timer(isDarkMode)}>{formatTime(time)}</Text>
 
-        <Pressable onPress={() => navigation.navigate('Settings')} >
-          <Image source={require("../../../assets/setting.png")} style={styles.icon(isDarkMode)} />
+        <Pressable onPress={() => navigation.navigate("Settings")}>
+          <Image
+            source={require("../../../assets/setting.png")}
+            style={styles.icon(isDarkMode)}
+          />
         </Pressable>
-
       </View>
-
 
       <Dashboard numOfFlags={numOfFlags} />
 
-      <Table table={table} setTable={setTable} isFirst={isFirst} setIsFirst={setIsFirst}
-        isPlay={isPlay} setIsPlay={setIsPlay} setNumOfFlag={setNumOfFlag} time={time} 
+      <Table
+        table={table}
+        setTable={setTable}
+        isFirst={isFirst}
+        setIsFirst={setIsFirst}
+        isPlay={isPlay}
+        setIsPlay={setIsPlay}
+        setNumOfFlag={setNumOfFlag}
+        time={time}
       />
-
     </View>
-  );
+  )
 }
-
 
 const styles = StyleSheet.create({
   container: (darkMode) => ({
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
     paddingTop: 25,
-    backgroundColor: darkMode ? colors.dark : colors.white 
+    backgroundColor: darkMode ? colors.dark : colors.white
   }),
 
   timer: (darkMode) => ({
     color: darkMode ? colors.white : colors.dark,
     fontSize: 45,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    fontWeight: "bold",
+    textAlign: "center"
   }),
 
   topSide: {
@@ -164,7 +170,6 @@ const styles = StyleSheet.create({
     marginTop: 7,
     height: 45,
     aspectRatio: 1,
-    tintColor: darkMode ? colors.white : colors.dark,
+    tintColor: darkMode ? colors.white : colors.dark
   })
-
-});
+})
