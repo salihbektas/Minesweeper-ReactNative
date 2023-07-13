@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 import { Image, Pressable, StyleSheet, Switch, Text, View } from "react-native"
 import colors from "../../../colors"
 import { useAtom } from "jotai"
@@ -24,6 +24,20 @@ export default function Settings({ navigation }) {
     { label: "Hard", value: 2 }
   ])
 
+  const [openLanguages, setOpenLanguages] = useState(false)
+  const [languages, setLanguages] = useState([
+    { label: "English", value: "en" },
+    { label: "Türkçe", value: "tr" }
+  ])
+
+  const onLanguagesOpen = useCallback(() => {
+    setOpenDifficulties(false)
+  }, [])
+
+  const onDifficultiesOpen = useCallback(() => {
+    setOpenLanguages(false)
+  }, [])
+
   function changeTheme(isDarkMode) {
     AsyncStorage.setItem("DarkMode", JSON.stringify(isDarkMode)).catch(
       (err) => {
@@ -41,6 +55,16 @@ export default function Settings({ navigation }) {
       }
     )
     setData((data) => ({ ...data, difficulty: newDifficulty }))
+  }
+
+  function changeLanguage(selectedLanguage) {
+    let newLanguage = selectedLanguage()
+    AsyncStorage.setItem("Language", JSON.stringify(newLanguage)).catch(
+      (err) => {
+        console.error("error on save Language", err)
+      }
+    )
+    setData((data) => ({ ...data, language: newLanguage }))
   }
 
   function changeVibration() {
@@ -101,10 +125,27 @@ export default function Settings({ navigation }) {
               <Text style={styles.text(darkMode)}>{"Difficulty:"}</Text>
               <DropDownPicker
                 open={openDifficulties}
+                onOpen={onDifficultiesOpen}
                 value={data.difficulty}
                 items={difficulties}
                 setOpen={setOpenDifficulties}
                 setValue={changeDifficulty}
+                theme={darkMode ? "LIGHT" : "DARK"}
+                containerStyle={styles.dropDownPicker}
+                style={styles.dropDownPickerStyle(darkMode)}
+                dropDownContainerStyle={styles.dropDownPickerStyle(darkMode)}
+              />
+            </View>
+
+            <View style={styles.row}>
+              <Text style={styles.text(darkMode)}>{"Languages:"}</Text>
+              <DropDownPicker
+                open={openLanguages}
+                onOpen={onLanguagesOpen}
+                value={data.language}
+                items={languages}
+                setOpen={setOpenLanguages}
+                setValue={changeLanguage}
                 theme={darkMode ? "LIGHT" : "DARK"}
                 containerStyle={styles.dropDownPicker}
                 style={styles.dropDownPickerStyle(darkMode)}

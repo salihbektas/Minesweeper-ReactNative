@@ -77,6 +77,10 @@ export default function Game({ navigation }) {
         if (vibration !== null) {
           setData((d) => ({ ...d, vibration: JSON.parse(vibration) }))
         }
+        const language = await AsyncStorage.getItem("Language")
+        if (language !== null) {
+          setData((d) => ({ ...d, language: JSON.parse(language) }))
+        }
       } catch (e) {
         console.warn(e)
       } finally {
