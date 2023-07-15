@@ -6,22 +6,25 @@ import { store } from "../../store"
 import DropDownPicker from "react-native-dropdown-picker"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { formatTime } from "../../utils"
-
-const tabs = ["Settings", "Records"]
+import { useTranslation } from "react-i18next"
 
 export default function Settings({ navigation }) {
   const [selectedTab, setSelectedTab] = useState(0)
 
   const [data, setData] = useAtom(store)
 
+  const { t, i18n } = useTranslation()
+
+  const tabs = [t("namespace.Settings"), t("namespace.Records")]
+
   const darkMode = data.darkMode
   const vibration = data.vibration
 
   const [openDifficulties, setOpenDifficulties] = useState(false)
   const [difficulties, setDifficulties] = useState([
-    { label: "Easy", value: 0 },
-    { label: "Medium", value: 1 },
-    { label: "Hard", value: 2 }
+    { label: t("namespace.Easy"), value: 0 },
+    { label: t("namespace.Medium"), value: 1 },
+    { label: t("namespace.Hard"), value: 2 }
   ])
 
   const [openLanguages, setOpenLanguages] = useState(false)
@@ -59,12 +62,18 @@ export default function Settings({ navigation }) {
 
   function changeLanguage(selectedLanguage) {
     let newLanguage = selectedLanguage()
+    i18n.changeLanguage(newLanguage)
     AsyncStorage.setItem("Language", JSON.stringify(newLanguage)).catch(
       (err) => {
         console.error("error on save Language", err)
       }
     )
     setData((data) => ({ ...data, language: newLanguage }))
+    setDifficulties([
+      { label: t("namespace.Easy"), value: 0 },
+      { label: t("namespace.Medium"), value: 1 },
+      { label: t("namespace.Hard"), value: 2 }
+    ])
   }
 
   function changeVibration() {
@@ -109,7 +118,9 @@ export default function Settings({ navigation }) {
         {selectedTab === 0 ? (
           <>
             <View style={styles.row}>
-              <Text style={styles.text(darkMode)}>{"Dark Mode:"}</Text>
+              <Text style={styles.text(darkMode)}>
+                {t("namespace.Darkmode")}
+              </Text>
               <Switch
                 thumbColor={colors.tileOpened}
                 trackColor={{
@@ -122,8 +133,11 @@ export default function Settings({ navigation }) {
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.text(darkMode)}>{"Difficulty:"}</Text>
+              <Text style={styles.text(darkMode)}>
+                {t("namespace.Difficulty")}
+              </Text>
               <DropDownPicker
+                zIndex={2}
                 open={openDifficulties}
                 onOpen={onDifficultiesOpen}
                 value={data.difficulty}
@@ -138,8 +152,11 @@ export default function Settings({ navigation }) {
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.text(darkMode)}>{"Languages:"}</Text>
+              <Text style={styles.text(darkMode)}>
+                {t("namespace.Languages")}
+              </Text>
               <DropDownPicker
+                zIndex={1}
                 open={openLanguages}
                 onOpen={onLanguagesOpen}
                 value={data.language}
@@ -154,7 +171,9 @@ export default function Settings({ navigation }) {
             </View>
 
             <View style={styles.row}>
-              <Text style={styles.text(darkMode)}>{"Vibration:"}</Text>
+              <Text style={styles.text(darkMode)}>
+                {t("namespace.Vibration")}
+              </Text>
               <Switch
                 thumbColor={colors.tileOpened}
                 trackColor={{
@@ -168,14 +187,26 @@ export default function Settings({ navigation }) {
           </>
         ) : (
           <>
-            <Text style={styles.feedbackText(darkMode)}>{`Easy: ${
-              data.records.e ? formatTime(data.records.e) : "not set"
+            <Text style={styles.feedbackText(darkMode)}>{`${t(
+              "namespace.Easy"
+            )}: ${
+              data.records.e
+                ? formatTime(data.records.e)
+                : t("namespace.notset")
             }`}</Text>
-            <Text style={styles.feedbackText(darkMode)}>{`Medium: ${
-              data.records.m ? formatTime(data.records.m) : "not set"
+            <Text style={styles.feedbackText(darkMode)}>{`${t(
+              "namespace.Medium"
+            )}: ${
+              data.records.m
+                ? formatTime(data.records.m)
+                : t("namespace.notset")
             }`}</Text>
-            <Text style={styles.feedbackText(darkMode)}>{`hard: ${
-              data.records.h ? formatTime(data.records.h) : "not set"
+            <Text style={styles.feedbackText(darkMode)}>{`${t(
+              "namespace.Hard"
+            )}: ${
+              data.records.h
+                ? formatTime(data.records.h)
+                : t("namespace.notset")
             }`}</Text>
           </>
         )}

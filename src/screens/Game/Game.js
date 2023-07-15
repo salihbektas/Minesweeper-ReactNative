@@ -13,6 +13,9 @@ import { store } from "../../store"
 import useInterval from "use-interval"
 import { formatTime } from "../../utils"
 import { useIsFocused } from "@react-navigation/native"
+import { useTranslation } from "react-i18next"
+
+import "../../locales/inedex"
 
 export default function Game({ navigation }) {
   const [isPlay, setIsPlay] = useState(true)
@@ -23,6 +26,8 @@ export default function Game({ navigation }) {
   const [data, setData] = useAtom(store)
   const isDarkMode = data.darkMode
   const isFocused = useIsFocused()
+
+  const { t, i18n } = useTranslation()
 
   const [appIsReady, setAppIsReady] = useState(false)
   const [table, setTable] = useState([[]])
@@ -80,6 +85,7 @@ export default function Game({ navigation }) {
         const language = await AsyncStorage.getItem("Language")
         if (language !== null) {
           setData((d) => ({ ...d, language: JSON.parse(language) }))
+          i18n.changeLanguage(JSON.parse(language))
         }
       } catch (e) {
         console.warn(e)
