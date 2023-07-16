@@ -29,8 +29,15 @@ LongPress to **closed** tile - to place a flag
 
 LongPress to **opened** tile - to open all neighbour tiles
 
-## Future Plans
+## Tech Stack
 
-There is development plan with **react native cli** for **desktop variant**
+```
+async-storage --------> for persistent data storage
+react-navigation -----> for pagination
+jotai ----------------> for state management
+i18next --------------> for multi language
+```
+
+## Screens
 
 ![Screen](/assets/Frame1.png)
